@@ -48,7 +48,7 @@ public class GroupTest : IClassFixture<ServicesFixture>
         foreach (CasdoorGroup casdoorGroup in getGroups)
         {
             _testOutputHelper.WriteLine(casdoorGroup.Name);
-            if (casdoorGroup.Name is appName)
+            if (casdoorGroup.Name == appName)
             {
                 found = true;
             }

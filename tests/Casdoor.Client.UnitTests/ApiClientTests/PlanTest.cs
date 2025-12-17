@@ -48,7 +48,7 @@ public class PlanTest : IClassFixture<ServicesFixture>
         foreach (CasdoorPlan casdoorPlan in getPlans)
         {
             _testOutputHelper.WriteLine(casdoorPlan.Name);
-            if (casdoorPlan.Name is appName)
+            if (casdoorPlan.Name == appName)
             {
                 found = true;
             }

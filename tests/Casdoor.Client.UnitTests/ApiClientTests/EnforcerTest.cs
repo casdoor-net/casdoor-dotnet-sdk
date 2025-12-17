@@ -48,7 +48,7 @@ public class EnforcerTest : IClassFixture<ServicesFixture>
         foreach (CasdoorEnforcer casdoorEnforcer in getEnforcers)
         {
             _testOutputHelper.WriteLine(casdoorEnforcer.Name);
-            if (casdoorEnforcer.Name is appName)
+            if (casdoorEnforcer.Name == appName)
             {
                 found = true;
             }
