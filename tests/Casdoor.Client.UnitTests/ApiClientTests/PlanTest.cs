@@ -21,7 +21,7 @@ public class PlanTest : IClassFixture<ServicesFixture>
     {
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 
-        const string appName = $"group-a";
+        string appName = "plan-" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
         const string ownerName = "casbin";
 
         var plan = new CasdoorPlan()
