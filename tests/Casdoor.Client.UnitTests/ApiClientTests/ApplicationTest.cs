@@ -43,7 +43,7 @@ public class ApplicationTest : IClassFixture<ServicesFixture>
         bool found = false;
         foreach (CasdoorApplication casdoorApplication in getApplications)
         {
-            if (casdoorApplication.Name is appName)
+            if (casdoorApplication.Name == appName)
             {
                 found = true;
             }

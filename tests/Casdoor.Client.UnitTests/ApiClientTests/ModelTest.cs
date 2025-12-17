@@ -59,7 +59,7 @@ m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act";
         foreach (CasdoorModel casdoorModel in getModels)
         {
             _testOutputHelper.WriteLine(casdoorModel.Name);
-            if (casdoorModel.Name is appName)
+            if (casdoorModel.Name == appName)
             {
                 found = true;
             }
