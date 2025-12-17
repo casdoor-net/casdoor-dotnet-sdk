@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Casdoor.Client.UnitTests.Fixtures;
+using Casdoor.Client.UnitTests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 using static System.Net.Mime.MediaTypeNames;
@@ -28,7 +29,7 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
             var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 
             const string ownerName = "admin";
-            string name = "Provider_" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+            string name = TestUtils.GetRandomName("Provider");
 
             var provider = new CasdoorProvider()
             {

@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Casdoor.Client.UnitTests.Fixtures;
+using Casdoor.Client.UnitTests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -20,7 +21,7 @@ public class TokenTest : IClassFixture<ServicesFixture>
     public async void TestToken()
     {
         var tokenClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
-        string name = "Token_" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds().ToString();
+        string name = TestUtils.GetRandomName("Token");
         _testOutputHelper.WriteLine($"test with token name {name}");
         string owner = "admin";
 

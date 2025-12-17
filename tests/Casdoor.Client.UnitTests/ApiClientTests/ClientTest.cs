@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Casdoor.Client.UnitTests.Fixtures;
+using Casdoor.Client.UnitTests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32.SafeHandles;
 using Xunit.Abstractions;
@@ -28,8 +29,8 @@ namespace Casdoor.Client.UnitTests.ApiClientTests;
         public async void TestClient()
         {
             var tokenClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
-            string name = "TokenClient_" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds().ToString();
-            string code = "Code_" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds().ToString();
+            string name = TestUtils.GetRandomName("TokenClient");
+            string code = TestUtils.GetRandomName("Code");
             _testOutputHelper.WriteLine($"test with token name {name}");
             string owner = "admin";
             var verifier = "test";

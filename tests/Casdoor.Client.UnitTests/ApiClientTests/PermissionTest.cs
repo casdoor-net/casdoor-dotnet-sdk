@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Casdoor.Client.UnitTests.Fixtures;
+using Casdoor.Client.UnitTests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -24,7 +25,7 @@ public class PermissionTest : IClassFixture<ServicesFixture>
     public async void TestPermission()
     {
         var permissionClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
-        string name = "Permission_" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+        string name = TestUtils.GetRandomName("Permission");
         _testOutputHelper.WriteLine($"test with Permission name {name}");
         string owner = "casbin";
 

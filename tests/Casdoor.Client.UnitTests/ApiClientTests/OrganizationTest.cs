@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Casdoor.Client.UnitTests.Fixtures;
+using Casdoor.Client.UnitTests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -24,7 +25,7 @@ public class OrganizationTest : IClassFixture<ServicesFixture>
     public async void TestOrganization()
     {
         var organizationClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
-        string name = "Organization_" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+        string name = TestUtils.GetRandomName("Organization");
         _testOutputHelper.WriteLine($"test with organization name {name}");
         string owner = "admin";
 

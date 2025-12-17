@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Casdoor.Client.UnitTests.Fixtures;
+using Casdoor.Client.UnitTests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -27,7 +28,7 @@ public class SyncerTest : IClassFixture<ServicesFixture>
     {
 
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
-        string name = "Syncer_" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+        string name = TestUtils.GetRandomName("Syncer");
         string appName = $"admin/{name}";
 
         CasdoorSyncer syncer = new CasdoorSyncer()

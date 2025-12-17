@@ -1,5 +1,6 @@
 using System.Globalization;
 using Casdoor.Client.UnitTests.Fixtures;
+using Casdoor.Client.UnitTests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -21,7 +22,7 @@ public class EnforcerTest : IClassFixture<ServicesFixture>
     {
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 
-        string appName = "enforcer-" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+        string appName = TestUtils.GetRandomName("enforcer");
         const string ownerName = "casbin";
 
         var enforcer = new CasdoorEnforcer()

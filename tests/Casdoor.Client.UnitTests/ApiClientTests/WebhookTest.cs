@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Casdoor.Client.UnitTests.Fixtures;
+using Casdoor.Client.UnitTests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -27,7 +28,7 @@ public class WebhookTest : IClassFixture<ServicesFixture>
     {
 
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
-        string name = "Webhook_" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+        string name = TestUtils.GetRandomName("Webhook");
         string appName = $"admin/{name}";
 
         CasdoorWebhook webhook = new CasdoorWebhook()

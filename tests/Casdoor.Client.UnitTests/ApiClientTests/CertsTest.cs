@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Casdoor.Client.UnitTests.Fixtures;
+using Casdoor.Client.UnitTests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -28,7 +29,7 @@ public class CertTest : IClassFixture<ServicesFixture>
 
 
         const string ownerName = "admin";
-        string name = "Cert_" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+        string name = TestUtils.GetRandomName("Cert");
 
         var cert = new CasdoorCert()
         {

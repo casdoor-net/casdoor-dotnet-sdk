@@ -1,5 +1,6 @@
 using System.Globalization;
 using Casdoor.Client.UnitTests.Fixtures;
+using Casdoor.Client.UnitTests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -21,7 +22,7 @@ public class ApplicationTest : IClassFixture<ServicesFixture>
     {
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 
-        string appName = "app-" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+        string appName = TestUtils.GetRandomName("Application");
         const string ownerName = CasdoorConstants.DefaultCasdoorOwner;
         var application = new CasdoorApplication()
         {
