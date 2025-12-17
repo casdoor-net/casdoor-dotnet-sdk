@@ -18,8 +18,6 @@ namespace Casdoor.Client.UnitTests.Utilities;
 
 public static class TestUtils
 {
-    private static readonly Random Random = new Random();
-
     /// <summary>
     /// Generates a random numeric code of specified length
     /// </summary>
@@ -29,9 +27,10 @@ public static class TestUtils
     {
         const string digits = "0123456789";
         var result = new char[length];
+        var random = new Random();
         for (int i = 0; i < length; i++)
         {
-            result[i] = digits[Random.Next(digits.Length)];
+            result[i] = digits[random.Next(digits.Length)];
         }
         return new string(result);
     }
