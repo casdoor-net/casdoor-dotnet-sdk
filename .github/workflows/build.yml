@@ -46,7 +46,7 @@ jobs:
 
     - name: Upload test results artefacts
       if: github.repository_owner == 'casdoor' && github.event_name == 'push'
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v4
       with:
         name: "drop-ci-test-results"
         path: './test-results'
@@ -119,7 +119,7 @@ jobs:
         dotnet pack -c Release -o packages /p:PackageVersion=$PackageVersion /p:Version=$Version;
 
     - name: Upload packages artefacts
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v4
       with:
         name: "drop-ci-build-packages"
         path: './packages'
