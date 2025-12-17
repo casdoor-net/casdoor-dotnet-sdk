@@ -21,7 +21,7 @@ public class EnforcerTest : IClassFixture<ServicesFixture>
     {
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 
-        const string appName = $"enforce-name";
+        string appName = "enforcer-" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
         const string ownerName = "casbin";
 
         var enforcer = new CasdoorEnforcer()

@@ -21,7 +21,7 @@ public class ModelTest : IClassFixture<ServicesFixture>
     {
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 
-        const string appName = $"model-name-4";
+        string appName = "model-" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
         const string ownerName = "casbin";
         const string modelText = @"[request_definition]
 r = sub, obj, act

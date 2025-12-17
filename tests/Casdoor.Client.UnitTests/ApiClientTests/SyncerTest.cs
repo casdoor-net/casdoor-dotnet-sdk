@@ -27,7 +27,7 @@ public class SyncerTest : IClassFixture<ServicesFixture>
     {
 
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
-        string name = "Syncer_" + DateTime.Now.ToLongTimeString();
+        string name = "Syncer_" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
         string appName = $"admin/{name}";
 
         CasdoorSyncer syncer = new CasdoorSyncer()

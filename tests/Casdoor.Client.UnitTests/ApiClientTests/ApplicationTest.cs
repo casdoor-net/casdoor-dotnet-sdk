@@ -21,7 +21,7 @@ public class ApplicationTest : IClassFixture<ServicesFixture>
     {
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 
-        const string appName = "admin-name";
+        string appName = "app-" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
         const string ownerName = CasdoorConstants.DefaultCasdoorOwner;
         var application = new CasdoorApplication()
         {
