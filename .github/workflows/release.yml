@@ -46,7 +46,7 @@ jobs:
            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=json,cobertura,lcov,teamcity,opencover
 
     - name: Upload test results artefacts
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v4
       with:
         name: "drop-ci-test-results"
         path: './test-results'
@@ -111,7 +111,7 @@ jobs:
         dotnet pack -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
 
     - name: Upload packages artefacts
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v4
       with:
         name: "drop-ci-packages"
         path: './packages'
