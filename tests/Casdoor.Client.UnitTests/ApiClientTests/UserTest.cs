@@ -82,4 +82,24 @@ public class UserTest : IClassFixture<ServicesFixture>
         getUser = await userAsync;
         Assert.Null(getUser);
     }
+
+    [Fact]
+    public async void TestGetPaginationUsers()
+    {
+        var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        string owner = "casbin";
+
+        // Get paginated users with page size 5 and page 1
+        var (users, totalCount) = await userClient.GetPaginationUsersAsync(1, 5);
+        
+        Assert.NotNull(users);
+        Assert.True(users.Any());
+        Assert.True(totalCount > 0);
+        _testOutputHelper.WriteLine($"Total users: {totalCount}, Retrieved: {users.Count()}");
+        
+        foreach (CasdoorUser user in users)
+        {
+            _testOutputHelper.WriteLine($"User: {user.Name}");
+        }
+    }
 }

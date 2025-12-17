@@ -18,6 +18,7 @@ public interface ICasdoorUserClient
 {
     public Task<IEnumerable<CasdoorUser>?> GetUsersAsync(string? owner = null, CancellationToken cancellationToken = default);
     public Task<IEnumerable<CasdoorUser>?> GetSortedUsersAsync(string sorter, int limit, string? owner = null, CancellationToken cancellationToken = default);
+    public Task<(IEnumerable<CasdoorUser>?, int)> GetPaginationUsersAsync(int p, int pageSize, List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default);
     public Task<CasdoorUser?> GetUserAsync(string name, string? owner = null, CancellationToken cancellationToken = default);
     public Task<CasdoorUser?> GetUserByEmailAsync(string email, string? owner = null, CancellationToken cancellationToken = default);
     public Task<CasdoorUser?> GetUserByPhoneAsync(string phone, string? owner = null, CancellationToken cancellationToken = default);
