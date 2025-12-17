@@ -27,10 +27,9 @@ public static class TestUtils
     {
         const string digits = "0123456789";
         var result = new char[length];
-        var random = new Random();
         for (int i = 0; i < length; i++)
         {
-            result[i] = digits[random.Next(digits.Length)];
+            result[i] = digits[Random.Shared.Next(digits.Length)];
         }
         return new string(result);
     }
