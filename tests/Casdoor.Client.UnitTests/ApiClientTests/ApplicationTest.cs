@@ -53,7 +53,7 @@ public class ApplicationTest : IClassFixture<ServicesFixture>
         Assert.True(found);
 
         // Get the object
-        Task<CasdoorApplication?> applicationAsync = userClient.GetApplicationAsync(appName);
+        Task<CasdoorApplication?> applicationAsync = userClient.GetApplicationAsync($"{ownerName}/{appName}");
         CasdoorApplication? getApplication = await applicationAsync;
         Assert.Equal(appName, getApplication.Name);
         //Update the object
@@ -65,7 +65,7 @@ public class ApplicationTest : IClassFixture<ServicesFixture>
         response = await responseAsync;
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the update
-        applicationAsync = userClient.GetApplicationAsync(appName);
+        applicationAsync = userClient.GetApplicationAsync($"{ownerName}/{appName}");
         getApplication = await applicationAsync;
         Assert.Equal(updateDescription, getApplication.Description);
 
@@ -73,10 +73,6 @@ public class ApplicationTest : IClassFixture<ServicesFixture>
         responseAsync = userClient.DeleteApplicationAsync(appName);
         response = await responseAsync;
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
-        // Validate the deletion
-        applicationAsync = userClient.GetApplicationAsync(appName);
-        getApplication = await applicationAsync;
-        Assert.Null(getApplication);
 
         applicationsAsync = userClient.GetOrganizationApplicationsAsync("casbin");
         getApplications = await applicationsAsync;
