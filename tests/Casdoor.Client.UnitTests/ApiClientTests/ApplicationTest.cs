@@ -74,7 +74,7 @@ public class ApplicationTest : IClassFixture<ServicesFixture>
         response = await responseAsync;
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the deletion
-        applicationAsync = userClient.GetApplicationAsync($"{ownerName}/{appName}");
+        applicationAsync = userClient.GetApplicationAsync(appName);
         getApplication = await applicationAsync;
         Assert.Null(getApplication);
 
