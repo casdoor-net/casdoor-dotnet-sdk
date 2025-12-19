@@ -40,7 +40,7 @@ public class PermissionTest : IClassFixture<ServicesFixture>
             Groups = new string[] { },
             Roles = new string[] { },
             Domains = new string[] { },
-            Model = "built-in/user-model-built-in",
+            Model = "admin/user-model-built-in",
             ResourceType = "Application",
             Resources = new string[] { "app-casbin" },
             Actions = new string[] { "Read", "Write" },

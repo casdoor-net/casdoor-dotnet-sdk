@@ -30,6 +30,7 @@ public class TokenTest : IClassFixture<ServicesFixture>
             Owner = owner,
             Name = name,
             CreatedTime = DateTime.Now.ToString(),
+            Organization = "casbin",
             Code = "abc",
             AccessToken = "123456"
         };
