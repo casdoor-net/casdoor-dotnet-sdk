@@ -76,6 +76,7 @@ public class PermissionTest : IClassFixture<ServicesFixture>
         // Get the object
         Task<CasdoorPermission?> PermissionAsync = permissionClient.GetPermissionAsync($"{owner}/{ name}");
         CasdoorPermission ? getPermission = await PermissionAsync;
+        Assert.NotNull(getPermission);
         Assert.Equal(name, getPermission.Name);
 
         // Update the object
@@ -88,6 +89,7 @@ public class PermissionTest : IClassFixture<ServicesFixture>
         // Validate the update
         PermissionAsync = permissionClient.GetPermissionAsync($"{owner}/{name}");
         getPermission = await PermissionAsync;
+        Assert.NotNull(getPermission);
         Assert.Equal(updatedDescription, getPermission.Description);
 
         // Delete the object

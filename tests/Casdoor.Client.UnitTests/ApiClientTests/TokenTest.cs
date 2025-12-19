@@ -62,6 +62,7 @@ public class TokenTest : IClassFixture<ServicesFixture>
         // Get the object
         Task<CasdoorToken?> tokenAsync = tokenClient.GetTokenAsync(owner, name);
         CasdoorToken? getToken = await tokenAsync;
+        Assert.NotNull(getToken);
         Assert.Equal(name, getToken.Name);
 
         // Update the object
@@ -74,6 +75,7 @@ public class TokenTest : IClassFixture<ServicesFixture>
         // Validate the update
         tokenAsync = tokenClient.GetTokenAsync(owner, name);
         getToken = await tokenAsync;
+        Assert.NotNull(getToken);
         Assert.Equal(updatedCode, getToken.Code);
 
         // Delete the object
