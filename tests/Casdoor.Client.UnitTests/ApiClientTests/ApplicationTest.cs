@@ -58,10 +58,10 @@ public class ApplicationTest : IClassFixture<ServicesFixture>
         Assert.Equal(appName, getApplication.Name);
         //Update the object
         const string updateDescription = "Update Casdoor Website";
-        application.Description = updateDescription;
+        getApplication.Description = updateDescription;
         // Update the object
         responseAsync =
-            userClient.UpdateApplicationAsync($"{ownerName}/{appName}", application);
+            userClient.UpdateApplicationAsync($"{ownerName}/{appName}", getApplication);
         response = await responseAsync;
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the update
