@@ -166,4 +166,33 @@ public partial class CasdoorClient
         var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<int?>();
     }
+
+    public virtual async Task<(IEnumerable<CasdoorUser>? users, int totalCount)> GetPaginatedUsersAsync(
+        int page, 
+        int pageSize, 
+        IDictionary<string, string?>? queryParams = null, 
+        string? owner = null, 
+        CancellationToken cancellationToken = default)
+    {
+        var queryMapBuilder = new QueryMapBuilder()
+            .Add("owner", owner ?? _options.OrganizationName)
+            .Add("p", page.ToString())
+            .Add("pageSize", pageSize.ToString());
+
+        if (queryParams != null)
+        {
+            foreach (var param in queryParams)
+            {
+                queryMapBuilder.Add(param.Key, param.Value);
+            }
+        }
+
+        string url = _options.GetActionUrl("get-users", queryMapBuilder.QueryMap);
+        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        
+        var users = result.DeserializeData<IEnumerable<CasdoorUser>?>();
+        var totalCount = result.DeserializeData2<int?>() ?? 0;
+        
+        return (users, totalCount);
+    }
 }

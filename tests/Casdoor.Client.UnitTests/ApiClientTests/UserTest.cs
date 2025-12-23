@@ -83,4 +83,40 @@ public class UserTest : IClassFixture<ServicesFixture>
         getUser = await userAsync;
         Assert.Null(getUser);
     }
+
+    [Fact]
+    public async void TestUserPagination()
+    {
+        var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        string owner = "casbin";
+        
+        // Test pagination
+        var (users, totalCount) = await userClient.GetPaginatedUsersAsync(1, 10, null, owner);
+        
+        _testOutputHelper.WriteLine($"Total users count: {totalCount}");
+        _testOutputHelper.WriteLine($"Retrieved users in page: {users?.Count() ?? 0}");
+        
+        // Verify we got results
+        Assert.NotNull(users);
+        Assert.True(totalCount >= 0);
+        
+        // If there are users, verify the page size is respected
+        if (users.Any())
+        {
+            Assert.True(users.Count() <= 10);
+            _testOutputHelper.WriteLine($"First user: {users.First().Name}");
+        }
+        
+        // Test with custom query parameters
+        var queryParams = new Dictionary<string, string?>
+        {
+            { "field", "name" },
+            { "value", "" }
+        };
+        
+        var (filteredUsers, filteredCount) = await userClient.GetPaginatedUsersAsync(1, 5, queryParams, owner);
+        Assert.NotNull(filteredUsers);
+        Assert.True(filteredCount >= 0);
+        _testOutputHelper.WriteLine($"Filtered users count: {filteredCount}");
+    }
 }
