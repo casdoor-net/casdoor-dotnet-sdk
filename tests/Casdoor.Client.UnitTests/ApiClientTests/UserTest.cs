@@ -85,7 +85,7 @@ public class UserTest : IClassFixture<ServicesFixture>
     }
 
     [Fact]
-    public async void TestUserPagination()
+    public async Task TestUserPagination()
     {
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
         string owner = "casbin";
