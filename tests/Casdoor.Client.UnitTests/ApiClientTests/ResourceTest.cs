@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Casdoor.Client.UnitTests.Fixtures;
 using Microsoft.Extensions.DependencyInjection;
-using NuGet.Frameworks;
 using Xunit.Abstractions;
 
 namespace Casdoor.Client.UnitTests.ApiClientTests;
@@ -23,7 +22,7 @@ public class ResourceTest : IClassFixture<ServicesFixture>
     }
 
     [Fact]
-    public async void TestResource()
+    public async Task TestResource()
     {
         var resourceClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
         //string name = "Resource_" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();

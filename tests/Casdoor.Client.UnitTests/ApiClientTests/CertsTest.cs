@@ -23,7 +23,7 @@ public class CertTest : IClassFixture<ServicesFixture>
     }
 
     [Fact]
-    public async void TestCert()
+    public async Task TestCert()
     {
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 

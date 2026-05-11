@@ -18,7 +18,7 @@ public class ApplicationTest : IClassFixture<ServicesFixture>
     }
 
     [Fact]
-    public async void TestApplications()
+    public async Task TestApplications()
     {
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 

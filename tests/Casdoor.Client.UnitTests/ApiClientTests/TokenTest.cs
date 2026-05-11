@@ -18,7 +18,7 @@ public class TokenTest : IClassFixture<ServicesFixture>
     }
 
     [Fact]
-    public async void TestToken()
+    public async Task TestToken()
     {
         var tokenClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
         string name = TestUtils.GetRandomName("Token");

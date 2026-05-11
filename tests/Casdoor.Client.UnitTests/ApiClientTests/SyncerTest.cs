@@ -24,7 +24,7 @@ public class SyncerTest : IClassFixture<ServicesFixture>
     }
 
     [Fact]
-    public async void TestSyncer()
+    public async Task TestSyncer()
     {
 
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();

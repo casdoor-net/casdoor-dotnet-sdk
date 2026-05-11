@@ -22,7 +22,7 @@ public class OrganizationTest : IClassFixture<ServicesFixture>
     }
 
     [Fact]
-    public async void TestOrganization()
+    public async Task TestOrganization()
     {
         var organizationClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
         string name = TestUtils.GetRandomName("Organization");

@@ -18,7 +18,7 @@ public class GroupTest : IClassFixture<ServicesFixture>
     }
 
     [Fact]
-    public async void TestGroup()
+    public async Task TestGroup()
     {
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 

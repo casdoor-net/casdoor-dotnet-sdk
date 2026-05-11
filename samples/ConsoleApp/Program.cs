@@ -1,4 +1,5 @@
-﻿using Casdoor.Client;
+﻿using System.Net.Http;
+using Casdoor.Client;
 using ConsoleApp;
 using Microsoft.IdentityModel.Logging;
 

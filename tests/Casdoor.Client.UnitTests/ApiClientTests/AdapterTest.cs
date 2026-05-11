@@ -23,7 +23,7 @@ public class AdapterTest : IClassFixture<ServicesFixture>
     }
 
     [Fact]
-    public async void TestAdapter()
+    public async Task TestAdapter()
     {
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 

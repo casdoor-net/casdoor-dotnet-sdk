@@ -15,7 +15,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
 using System.Text.Json;
-using IdentityModel.Client;
+using Duende.IdentityModel.Client;
 
 namespace Casdoor.Client;
 

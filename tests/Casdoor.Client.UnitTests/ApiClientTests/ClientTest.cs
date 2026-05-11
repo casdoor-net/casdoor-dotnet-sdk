@@ -26,12 +26,12 @@ namespace Casdoor.Client.UnitTests.ApiClientTests;
         }
 
         [Fact]
-        public async void TestClient()
+        public async Task TestClient()
         {
             var tokenClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
-            string name = TestUtils.GetRandomName("TokenClient");
-            string code = TestUtils.GetRandomName("Code");
-            _testOutputHelper.WriteLine($"test with token name {name}");
+        string name = TestUtils.GetRandomName("TokenClient");
+        string code = TestUtils.GetRandomName("Code");
+        _testOutputHelper.WriteLine($"test with token name {name}");
             string owner = "admin";
             var verifier = "test";
 

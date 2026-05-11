@@ -137,7 +137,7 @@ public static class CasdoorClientOptionsExtension
         // ReSharper disable once LoopCanBeConvertedToQuery
         foreach (var cert in options.Protocols.JwtCert)
         {
-            X509Certificate2 certificate2 = new X509Certificate2(
+            X509Certificate2 certificate2 = X509CertificateLoader.LoadPkcs12FromFile(
                 cert.FilePath, cert.Password
             );
             X509SecurityKey securityKey = new(certificate2);

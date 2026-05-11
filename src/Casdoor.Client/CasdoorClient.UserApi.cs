@@ -88,10 +88,10 @@ public partial class CasdoorClient
         return ModifyUserAsync("update-user", user, null, cancellationToken: cancellationToken);
     }
 
-    public virtual Task<CasdoorResponse?> UpdateUserForColumns(CasdoorUser user,IEnumerable<string> columns, CancellationToken cancellationToken)
+    public virtual Task<CasdoorResponse?> UpdateUserForColumns(CasdoorUser user, IEnumerable<string> columns, CancellationToken cancellationToken)
         => ModifyUserAsync("update-user", user, columns, cancellationToken: cancellationToken);
 
-    public virtual Task<CasdoorResponse?> UpdateUserAsync(CasdoorUser user,IEnumerable<string> propertyNames, CancellationToken cancellationToken = default)
+    public virtual Task<CasdoorResponse?> UpdateUserAsync(CasdoorUser user, IEnumerable<string> propertyNames, CancellationToken cancellationToken = default)
         => ModifyUserAsync("update-user", user, propertyNames, cancellationToken: cancellationToken);
 
     public Task<CasdoorResponse?> UpdateUserForbiddenFlagAsync(CasdoorUser user, CancellationToken cancellationToken = default)
@@ -157,7 +157,7 @@ public partial class CasdoorClient
         return PostAsJsonAsync(url, user, cancellationToken);
     }
 
-    public virtual async Task<int?> GetUserCount(string owner,int isOnline, CancellationToken cancellationToken)
+    public virtual async Task<int?> GetUserCount(string owner, int isOnline, CancellationToken cancellationToken)
     {
         var queryMap = new QueryMapBuilder()
             .Add("owner", owner)
@@ -168,10 +168,10 @@ public partial class CasdoorClient
     }
 
     public virtual async Task<(IEnumerable<CasdoorUser>? users, int totalCount)> GetPaginatedUsersAsync(
-        int page, 
-        int pageSize, 
-        IDictionary<string, string?>? queryParams = null, 
-        string? owner = null, 
+        int page,
+        int pageSize,
+        IDictionary<string, string?>? queryParams = null,
+        string? owner = null,
         CancellationToken cancellationToken = default)
     {
         var queryMapBuilder = new QueryMapBuilder()
@@ -189,10 +189,10 @@ public partial class CasdoorClient
 
         string url = _options.GetActionUrl("get-users", queryMapBuilder.QueryMap);
         var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
-        
+
         var users = result.DeserializeData<IEnumerable<CasdoorUser>?>();
         var totalCount = result.DeserializeData2<int?>() ?? 0;
-        
+
         return (users, totalCount);
     }
 }

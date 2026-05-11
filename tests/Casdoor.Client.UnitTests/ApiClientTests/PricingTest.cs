@@ -24,7 +24,7 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
         }
 
         [Fact]
-        public async void TestPricing()
+        public async Task TestPricing()
         {
             var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 

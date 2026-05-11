@@ -14,7 +14,7 @@
 
 using System.Net.Http;
 using System.Net.Http.Json;
-using IdentityModel.Client;
+using Duende.IdentityModel.Client;
 
 namespace Casdoor.Client;
 

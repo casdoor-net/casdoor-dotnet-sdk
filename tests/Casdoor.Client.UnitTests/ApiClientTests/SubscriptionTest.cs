@@ -24,7 +24,7 @@ public class SubscriptionTest : IClassFixture<ServicesFixture>
     }
 
     [Fact]
-    public async void TestSubscription()
+    public async Task TestSubscription()
     {
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
         string name = TestUtils.GetRandomName("Subscription");

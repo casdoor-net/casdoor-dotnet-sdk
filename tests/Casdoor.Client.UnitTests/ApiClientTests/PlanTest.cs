@@ -18,7 +18,7 @@ public class PlanTest : IClassFixture<ServicesFixture>
     }
 
     [Fact]
-    public async void TestPlan()
+    public async Task TestPlan()
     {
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 

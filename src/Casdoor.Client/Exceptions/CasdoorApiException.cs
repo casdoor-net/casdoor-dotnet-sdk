@@ -26,9 +26,9 @@ public class CasdoorApiException : Exception
     {
     }
 
-    public CasdoorApiException(SerializationInfo info, StreamingContext context) : base(info, context)
-    {
-    }
+    //public CasdoorApiException(SerializationInfo info, StreamingContext context) : base(info, context)
+    //{
+    //}
 
     public CasdoorApiException(string? message, Exception? innerException) : base(message, innerException)
     {

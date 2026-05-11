@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using System.Net.Http;
-using IdentityModel.Client;
+using Duende.IdentityModel.Client;
 
 namespace Casdoor.Client;
 

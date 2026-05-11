@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net6.0;net5.0;netcoreapp3.1;netstandard2.1;netstandard2.0;net462;net461;</TargetFrameworks>
+    <TargetFrameworks>net10.0;net9.0;net8.0;net48</TargetFrameworks>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>14.0</LangVersion>
     <RootNamespace>Casdoor.Client</RootNamespace>
     <NoWarn>CS1591</NoWarn>
   </PropertyGroup>
@@ -42,16 +42,14 @@
     <None Include="../../README.md" Pack="true" PackagePath="" />
     <None Include="../../assets/casdoor.png" Pack="true" Visible="false" PackagePath="" />
     <None Remove="Casdoor.Client.csproj.DotSettings" />
-    <PackageReference Include="Microsoft.SourceLink.Github" Version="1.1.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.Github" Version="10.0.203" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IdentityModel" Version="5.2.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.34.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.34.0" />
-    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
+    <PackageReference Include="Duende.IdentityModel" Version="8.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.7" />
+    <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.18.0" />
+    <PackageReference Include="System.Net.Http.Json" Version="10.0.7" Condition="'$(TargetFramework)' == 'net48'" />
+    <PackageReference Include="Microsoft.Bcl.Cryptography" Version="10.0.7" Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'net8.0'" />
   </ItemGroup>
 </Project>

@@ -22,7 +22,7 @@ public class PermissionTest : IClassFixture<ServicesFixture>
     }
 
     [Fact]
-    public async void TestPermission()
+    public async Task TestPermission()
     {
         var permissionClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
         string name = TestUtils.GetRandomName("Permission");

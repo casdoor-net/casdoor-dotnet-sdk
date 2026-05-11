@@ -24,7 +24,7 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
         }
 
         [Fact]
-        public async void TestSession()
+        public async Task TestSession()
         {
             var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 

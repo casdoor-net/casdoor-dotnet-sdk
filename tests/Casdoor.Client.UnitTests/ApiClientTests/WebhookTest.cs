@@ -24,7 +24,7 @@ public class WebhookTest : IClassFixture<ServicesFixture>
     }
 
     [Fact]
-    public async void TestWebhook()
+    public async Task TestWebhook()
     {
 
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();

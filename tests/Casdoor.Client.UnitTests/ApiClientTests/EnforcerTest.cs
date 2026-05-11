@@ -18,7 +18,7 @@ public class EnforcerTest : IClassFixture<ServicesFixture>
     }
 
     [Fact]
-    public async void TestEnforcer()
+    public async Task TestEnforcer()
     {
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 
