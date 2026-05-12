@@ -59,7 +59,7 @@ public class TokenTest : IClassFixture<ServicesFixture>
         }
 
         Assert.True(found);
-        
+
         // Get the object
         Task<CasdoorToken?> tokenAsync = tokenClient.GetTokenAsync(owner, name);
         CasdoorToken? getToken = await tokenAsync;
@@ -84,7 +84,13 @@ public class TokenTest : IClassFixture<ServicesFixture>
 
         // Validate the deletion
         tokenAsync = tokenClient.GetTokenAsync(owner, name);
-        getToken = await tokenAsync;
-        Assert.Null(getToken);
+
+        var ex = await Assert.ThrowsAsync<CasdoorApiException>(
+            async () =>
+            {
+                getToken = await tokenAsync;
+                Assert.Null(getToken);
+            });
+        Assert.Equal($"The token: {owner}/{name} does not exist", ex.Message);
     }
 }
