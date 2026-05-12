@@ -42,7 +42,8 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
                 Tag = "auto_created_product_for_plan",
                 Quantity = 999,
                 Sold = 0,
-                State = "Published"
+                State = "Published",
+                Currency= "CNY"
             };
 
             // Add a new object

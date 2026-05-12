@@ -31,6 +31,7 @@ public class PlanTest : IClassFixture<ServicesFixture>
             Name = appName,
             CreatedTime = DateTime.Now.ToString(CultureInfo.InvariantCulture),
             DisplayName = appName,
+            Currency="CNY",
         };
 
         // Add a new object
