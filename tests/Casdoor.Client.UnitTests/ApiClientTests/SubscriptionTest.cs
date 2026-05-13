@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -26,10 +26,10 @@ public class SubscriptionTest : IClassFixture<ServicesFixture>
     [Fact]
     public async Task TestSubscription()
     {
-        var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
         string name = TestUtils.GetRandomName("Subscription");
 
-        CasdoorSubscription subscription = new CasdoorSubscription()
+        var subscription = new CasdoorSubscription()
         {
             Owner = "admin",
             Name = name,
@@ -39,18 +39,18 @@ public class SubscriptionTest : IClassFixture<ServicesFixture>
         };
 
         // Add the object
-        Task<CasdoorResponse?> responseAsync = userClient.AddSubscriptionAsync(subscription);
-        CasdoorResponse? response = await responseAsync;
+        var responseAsync = userClient.AddSubscriptionAsync(subscription);
+        var response = TestUtils.AssertNotNull(await responseAsync);
         _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Get all objects, check if our added object is inside the list
-        Task<IEnumerable<CasdoorSubscription>?> subscriptionAsyncs = userClient.GetSubscriptionsAsync("admin");
-        IEnumerable<CasdoorSubscription>? getSubscriptions = await subscriptionAsyncs;
+        var subscriptionAsyncs = userClient.GetSubscriptionsAsync("admin");
+        var getSubscriptions = TestUtils.AssertNotNull(await subscriptionAsyncs);
         Assert.True(getSubscriptions.Any());
         _testOutputHelper.WriteLine($"{getSubscriptions.Count()}");
         bool found = false;
-        foreach (CasdoorSubscription casdoorSubscription in getSubscriptions)
+        foreach (var casdoorSubscription in getSubscriptions)
         {
             _testOutputHelper.WriteLine(casdoorSubscription.Name);
             if (casdoorSubscription.Name == name)
@@ -62,30 +62,30 @@ public class SubscriptionTest : IClassFixture<ServicesFixture>
         Assert.True(found);
 
         // Get the object
-        Task<CasdoorSubscription?> subscriptionAsync = userClient.GetSubscriptionAsync("admin", name);
-        CasdoorSubscription? getSubscription = await subscriptionAsync;
+        var subscriptionAsync = userClient.GetSubscriptionAsync("admin", name);
+        var getSubscription = TestUtils.AssertNotNull(await subscriptionAsync);
         Assert.Equal(name, getSubscription.Name);
 
         // Update the object
         string updateDescription = "Updated Casdoor Website";
         subscription.Description = updateDescription;
         responseAsync = userClient.UpdateSubscriptionAsync(subscription);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Validate the update
         subscriptionAsync = userClient.GetSubscriptionAsync("admin", name);
-        getSubscription = await subscriptionAsync;
+        getSubscription = TestUtils.AssertNotNull(await subscriptionAsync);
         Assert.Equal(updateDescription, getSubscription.Description);
 
         // Delete the object
         responseAsync = userClient.DeleteSubscriptionAsync(subscription);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Validate the deletion
         subscriptionAsync = userClient.GetSubscriptionAsync("admin", name);
-        getSubscription = await subscriptionAsync;
-        Assert.Null(getSubscription);
+        var deletedSubscription = await subscriptionAsync;
+        Assert.Null(deletedSubscription);
     }
 }

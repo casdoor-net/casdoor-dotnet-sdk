@@ -12,12 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Casdoor.Client.UnitTests.Utilities;
 
 public static class TestUtils
 {
+    public static T AssertNotNull<T>(T? value) where T : class
+    {
+        Assert.NotNull(value);
+        return value;
+    }
+
     /// <summary>
     /// Generates a random numeric code of specified length
     /// </summary>

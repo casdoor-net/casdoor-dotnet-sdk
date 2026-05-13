@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -26,7 +26,7 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
         [Fact]
         public async Task TestPricing()
         {
-            var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+            var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
 
             const string ownerName = "casbin";
             string name = TestUtils.GetRandomName("Pricing");
@@ -42,18 +42,18 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
             };
 
             // Add a new object
-            Task<CasdoorResponse?> responseAsync = userClient.AddPricingAsync(pricing);
-            CasdoorResponse? response = await responseAsync;
+            var responseAsync = userClient.AddPricingAsync(pricing);
+            var response = TestUtils.AssertNotNull(await responseAsync);
             _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
             Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
             // Get all objects, check if our added object is inside the list
-            Task<IEnumerable<CasdoorPricing>?> pricingsAsync = userClient.GetPricingsAsync();
-            IEnumerable<CasdoorPricing>? getPricings = await pricingsAsync;
+            var pricingsAsync = userClient.GetPricingsAsync();
+            var getPricings = TestUtils.AssertNotNull(await pricingsAsync);
             Assert.True(getPricings.Any());
             _testOutputHelper.WriteLine($"{getPricings.Count()}");
             bool found = false;
-            foreach (CasdoorPricing casdoorPricing in getPricings)
+            foreach (var casdoorPricing in getPricings)
             {
                 _testOutputHelper.WriteLine(casdoorPricing.Name);
                 if (casdoorPricing.Name == name)
@@ -65,8 +65,8 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
             Assert.True(found);
 
             // Get the object
-            Task<CasdoorPricing?> pricingAsync = userClient.GetPricingAsync(name);
-            CasdoorPricing? getPricing = await pricingAsync;
+            var pricingAsync = userClient.GetPricingAsync(name);
+            var getPricing = TestUtils.AssertNotNull(await pricingAsync);
             Assert.Equal(name, getPricing.Name);
 
             // Update the object
@@ -75,23 +75,23 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
 
             // Update the object
             responseAsync = userClient.UpdatePricingAsync(pricing);
-            response = await responseAsync;
+            response = TestUtils.AssertNotNull(await responseAsync);
             Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
             // Validate the update
             pricingAsync = userClient.GetPricingAsync(name);
-            getPricing = await pricingAsync;
+            getPricing = TestUtils.AssertNotNull(await pricingAsync);
             Assert.Equal(updatedDescription, getPricing.Description);
 
             // Delete the object
             responseAsync = userClient.DeletePricingAsync(getPricing);
-            response = await responseAsync;
+            response = TestUtils.AssertNotNull(await responseAsync);
             Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
             // Validate the deletion
             pricingAsync = userClient.GetPricingAsync(name);
-            getPricing = await pricingAsync;
-            Assert.Null(getPricing);
+            var deletedPricing = await pricingAsync;
+            Assert.Null(deletedPricing);
         }
     }
 }

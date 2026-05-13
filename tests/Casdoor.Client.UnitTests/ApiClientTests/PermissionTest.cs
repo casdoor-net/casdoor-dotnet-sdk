@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,12 +24,12 @@ public class PermissionTest : IClassFixture<ServicesFixture>
     [Fact]
     public async Task TestPermission()
     {
-        var permissionClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var permissionClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
         string name = TestUtils.GetRandomName("Permission");
         _testOutputHelper.WriteLine($"test with Permission name {name}");
         string owner = "casbin";
 
-        CasdoorPermission permission = new CasdoorPermission()
+        var permission = new CasdoorPermission()
         {
             Owner = owner,
             Name = name,
@@ -49,20 +49,20 @@ public class PermissionTest : IClassFixture<ServicesFixture>
         };
 
         // Add the object
-        Task<CasdoorResponse?> responseAsync = permissionClient.AddPermissionAsync(permission);
-        CasdoorResponse? response = await responseAsync;
+        var responseAsync = permissionClient.AddPermissionAsync(permission);
+        var response = TestUtils.AssertNotNull(await responseAsync);
         _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         await Task.Delay(1000);
 
         // Get all objects, check if our added object is inside the list
-        Task<IEnumerable<CasdoorPermission>?> permissionAsyncs = permissionClient.GetPermissionsAsync(owner);
-        IEnumerable<CasdoorPermission>? getPermissions = await permissionAsyncs;
+        var permissionAsyncs = permissionClient.GetPermissionsAsync(owner);
+        var getPermissions = TestUtils.AssertNotNull(await permissionAsyncs);
         Assert.True(getPermissions.Any());
         _testOutputHelper.WriteLine($"{getPermissions.Count()}");
         bool found = false;
-        foreach (CasdoorPermission casdoorPermission in getPermissions)
+        foreach (var casdoorPermission in getPermissions)
         {
             _testOutputHelper.WriteLine(casdoorPermission.Name);
             if (casdoorPermission.Name == name)
@@ -74,30 +74,30 @@ public class PermissionTest : IClassFixture<ServicesFixture>
         Assert.True(found);
 
         // Get the object
-        Task<CasdoorPermission?> PermissionAsync = permissionClient.GetPermissionAsync($"{owner}/{ name}");
-        CasdoorPermission ? getPermission = await PermissionAsync;
+        var permissionAsync = permissionClient.GetPermissionAsync($"{owner}/{name}");
+        var getPermission = TestUtils.AssertNotNull(await permissionAsync);
         Assert.Equal(name, getPermission.Name);
 
         // Update the object
         string updatedDescription = "Updated Code";
         getPermission.Description = updatedDescription;
         responseAsync = permissionClient.UpdatePermissionAsync(getPermission, "");
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Validate the update
-        PermissionAsync = permissionClient.GetPermissionAsync($"{owner}/{name}");
-        getPermission = await PermissionAsync;
+        permissionAsync = permissionClient.GetPermissionAsync($"{owner}/{name}");
+        getPermission = TestUtils.AssertNotNull(await permissionAsync);
         Assert.Equal(updatedDescription, getPermission.Description);
 
         // Delete the object
         responseAsync = permissionClient.DeletePermissionAsync(permission);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Validate the deletion
-        PermissionAsync = permissionClient.GetPermissionAsync($"{owner}/{name}");
-        getPermission = await PermissionAsync;
-        Assert.Null(getPermission);
+        permissionAsync = permissionClient.GetPermissionAsync($"{owner}/{name}");
+        var deletedPermission = await permissionAsync;
+        Assert.Null(deletedPermission);
     }
 }

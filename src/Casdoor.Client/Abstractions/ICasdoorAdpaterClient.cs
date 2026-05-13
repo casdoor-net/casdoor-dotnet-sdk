@@ -10,8 +10,8 @@ namespace Casdoor.Client;
 public interface ICasdoorAdapterClient
 {
     public Task<CasdoorResponse?> AddAdapterAsync(CasdoorAdapter adapter, CancellationToken cancellationToken = default);
-    public Task<CasdoorResponse?> UpdateAdapterAsync(CasdoorAdapter adapter, IEnumerable<string> propertyNames, CancellationToken cancellationToken = default);
-    public Task<CasdoorResponse?> UpdateAdapterColumnsAsync(CasdoorAdapter adapter, IEnumerable<string>? columns, CancellationToken cancellationToken = default);
+    public Task<CasdoorResponse?> UpdateAdapterAsync(CasdoorAdapter adapter, IEnumerable<string>? propertyNames = default, CancellationToken cancellationToken = default);
+    public Task<CasdoorResponse?> UpdateAdapterColumnsAsync(CasdoorAdapter adapter, IEnumerable<string>? columns = default, CancellationToken cancellationToken = default);
     public Task<CasdoorResponse?> DeleteAdapterAsync(string owner, string name, CancellationToken cancellationToken = default);
     public Task<CasdoorAdapter?> GetAdapterAsync(string owner, string name, CancellationToken cancellationToken = default);
     public Task<IEnumerable<CasdoorAdapter>?> GetAdaptersAsync(string owner, CancellationToken cancellationToken = default);

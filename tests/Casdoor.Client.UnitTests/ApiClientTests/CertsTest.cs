@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -25,7 +25,7 @@ public class CertTest : IClassFixture<ServicesFixture>
     [Fact]
     public async Task TestCert()
     {
-        var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
 
 
         const string ownerName = "admin";
@@ -46,18 +46,18 @@ public class CertTest : IClassFixture<ServicesFixture>
 
         // Add a new object
 
-        Task<CasdoorResponse?> responseAsync = userClient.AddCertAsync(cert);
-        CasdoorResponse? response = await responseAsync;
+        var responseAsync = userClient.AddCertAsync(cert);
+        var response = TestUtils.AssertNotNull(await responseAsync);
         _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Get all objects, check if our added object is inside the list
-        Task<IEnumerable<CasdoorCert>?> certsAsync = userClient.GetCertsAsync();
-        IEnumerable<CasdoorCert>? getCerts = await certsAsync;
+        var certsAsync = userClient.GetCertsAsync();
+        var getCerts = TestUtils.AssertNotNull(await certsAsync);
         Assert.True(getCerts.Any());
         _testOutputHelper.WriteLine($"{getCerts.Count()}");
         bool found = false;
-        foreach (CasdoorCert casdoorCert in getCerts)
+        foreach (var casdoorCert in getCerts)
         {
             _testOutputHelper.WriteLine(casdoorCert.Name);
             if (casdoorCert.Name == name)
@@ -69,8 +69,8 @@ public class CertTest : IClassFixture<ServicesFixture>
         Assert.True(found);
 
         // Get the object
-        Task<CasdoorCert?> certAsync = userClient.GetCertAsync(name);
-        CasdoorCert? getCert = await certAsync;
+        var certAsync = userClient.GetCertAsync(name);
+        var getCert = TestUtils.AssertNotNull(await certAsync);
         Assert.Equal(name, getCert.Name);
         //Update the object
         const string updatedDisplayName = "Updated Casdoor Website";
@@ -78,20 +78,20 @@ public class CertTest : IClassFixture<ServicesFixture>
         // Update the object
         responseAsync =
             userClient.UpdateCertAsync(cert);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the update
         certAsync = userClient.GetCertAsync(name);
-        getCert = await certAsync;
+        getCert = TestUtils.AssertNotNull(await certAsync);
         Assert.Equal(updatedDisplayName, getCert.DisplayName);
 
         // Delete the object
         responseAsync = userClient.DeleteCertAsync(name);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the deletion
         certAsync = userClient.GetCertAsync(name);
-        getCert = await certAsync;
-        Assert.Null(getCert);
+        var deletedCert = await certAsync;
+        Assert.Null(deletedCert);
     }
 }

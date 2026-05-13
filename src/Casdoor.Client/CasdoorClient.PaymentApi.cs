@@ -79,7 +79,7 @@ public partial class CasdoorClient
         return result.DeserializeData<IEnumerable<CasdoorPayment>?>();
     }
 
-    private Task<CasdoorResponse?> ModifyPaymentAsync(string action, CasdoorPayment payment, IEnumerable<string>? columns, string? owner = null, CancellationToken cancellationToken = default)
+    private Task<CasdoorResponse?> ModifyPaymentAsync(string action, CasdoorPayment payment, IEnumerable<string>? columns = default, string? owner = null, CancellationToken cancellationToken = default)
     {
         var queryMapBuilder = new QueryMapBuilder().Add("id", $"{payment.Owner}/{payment.Name}");
 

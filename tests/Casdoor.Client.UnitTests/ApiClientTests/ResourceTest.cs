@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Casdoor.Client.UnitTests.Fixtures;
+﻿using Casdoor.Client.UnitTests.Fixtures;
+using Casdoor.Client.UnitTests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -24,7 +19,7 @@ public class ResourceTest : IClassFixture<ServicesFixture>
     [Fact]
     public async Task TestResource()
     {
-        var resourceClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var resourceClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
         //string name = "Resource_" + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
         
         string owner = "casbin";
@@ -35,10 +30,9 @@ public class ResourceTest : IClassFixture<ServicesFixture>
         _testOutputHelper.WriteLine($"test with resource name {name}");
         Assert.True(File.Exists(path));
 
-        FileStream fs = File.OpenRead(path);
-        
+        var fs = File.OpenRead(path);
 
-        CasdoorUserResource resource = new CasdoorUserResource()
+        var resource = new CasdoorUserResource()
         {
             Owner = owner,
             Name = name,
@@ -51,20 +45,20 @@ public class ResourceTest : IClassFixture<ServicesFixture>
         };
 
         // Add the object
-        Task<CasdoorResponse?> responseAsync = resourceClient.UploadResourceAsync(resource.User, resource.Tag, "", resource.FileName, fs);
-        CasdoorResponse? response = await responseAsync;
+        var responseAsync = resourceClient.UploadResourceAsync(resource.User, resource.Tag, "", resource.FileName, fs);
+        var response = TestUtils.AssertNotNull(await responseAsync);
         _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         await Task.Delay(1000);
 
         // Get all objects, check if our added object is inside the list
-        Task<IEnumerable<CasdoorUserResource>?> resourceAsyncs = resourceClient.GetResourcesAsync(owner, "casbin", "", "", "", "");
-        IEnumerable<CasdoorUserResource>? getResources = await resourceAsyncs;
+        var resourceAsyncs = resourceClient.GetResourcesAsync(owner, "casbin", "", "", "", "");
+        var getResources = TestUtils.AssertNotNull(await resourceAsyncs);
         Assert.True(getResources.Any());
         _testOutputHelper.WriteLine($"{getResources.Count()}");
         bool found = false;
-        foreach (CasdoorUserResource casdoorResource in getResources)
+        foreach (var casdoorResource in getResources)
         {
             _testOutputHelper.WriteLine(casdoorResource.Name);
             if (casdoorResource.Tag == name)
@@ -76,18 +70,18 @@ public class ResourceTest : IClassFixture<ServicesFixture>
         Assert.True(found);
 
         // Get the object
-        Task<CasdoorUserResource?> resourceAsync = resourceClient.GetResourceAsync(name);
-        CasdoorUserResource? getResource = await resourceAsync;
+        var resourceAsync = resourceClient.GetResourceAsync(name);
+        var getResource = TestUtils.AssertNotNull(await resourceAsync);
         Assert.Equal(name, getResource.Tag);
 
         // Delete the object
         responseAsync = resourceClient.DeleteResourceAsync(name);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Validate the deletion
         resourceAsync = resourceClient.GetResourceAsync(name);
-        getResource = await resourceAsync;
-        Assert.Null(getResource);
+        var deletedResource = await resourceAsync;
+        Assert.Null(deletedResource);
     }
 }

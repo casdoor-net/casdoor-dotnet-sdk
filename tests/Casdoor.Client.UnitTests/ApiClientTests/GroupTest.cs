@@ -20,7 +20,7 @@ public class GroupTest : IClassFixture<ServicesFixture>
     [Fact]
     public async Task TestGroup()
     {
-        var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
 
         string appName = TestUtils.GetRandomName("group");
         const string ownerName = "casbin";
@@ -35,18 +35,18 @@ public class GroupTest : IClassFixture<ServicesFixture>
 
         // Add a new object
 
-        Task<CasdoorResponse?> responseAsync = userClient.AddGroupAsync(group);
-        CasdoorResponse? response = await responseAsync;
+        var responseAsync = userClient.AddGroupAsync(group);
+        var response = TestUtils.AssertNotNull(await responseAsync);
         _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Get all objects, check if our added object is inside the list
-        Task<IEnumerable<CasdoorGroup>?> groupsAsync = userClient.GetGroupsAsync();
-        IEnumerable<CasdoorGroup>? getGroups = await groupsAsync;
+        var groupsAsync = userClient.GetGroupsAsync();
+        var getGroups = TestUtils.AssertNotNull(await groupsAsync);
         Assert.True(getGroups.Any());
         _testOutputHelper.WriteLine($"{getGroups.Count()}");
         bool found = false;
-        foreach (CasdoorGroup casdoorGroup in getGroups)
+        foreach (var casdoorGroup in getGroups)
         {
             _testOutputHelper.WriteLine(casdoorGroup.Name);
             if (casdoorGroup.Name == appName)
@@ -58,8 +58,8 @@ public class GroupTest : IClassFixture<ServicesFixture>
         Assert.True(found);
 
         // Get the object
-        Task<CasdoorGroup?> groupAsync = userClient.GetGroupAsync($"{appName}");
-        CasdoorGroup? getGroup = await groupAsync;
+        var groupAsync = userClient.GetGroupAsync($"{appName}");
+        var getGroup = TestUtils.AssertNotNull(await groupAsync);
         Assert.Equal(appName, getGroup.Name);
         //Update the object
         const string displayName = "Update Casdoor Website";
@@ -67,21 +67,21 @@ public class GroupTest : IClassFixture<ServicesFixture>
         // Update the object
         responseAsync =
             userClient.UpdateGroupAsync(group, $"{ownerName}/{appName}");
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the update
         groupAsync = userClient.GetGroupAsync($"{appName}");
-        getGroup = await groupAsync;
+        getGroup = TestUtils.AssertNotNull(await groupAsync);
         Assert.Equal(displayName, getGroup.DisplayName);
 
         // Delete the object
         responseAsync = userClient.DeleteGroupAsync(group);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the deletion
         groupAsync = userClient.GetGroupAsync($"{appName}");
-        getGroup = await groupAsync;
-        Assert.Null(getGroup);
+        var deletedGroup = await groupAsync;
+        Assert.Null(deletedGroup);
 
     }
 }

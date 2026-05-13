@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -28,7 +28,7 @@ namespace Casdoor.Client.UnitTests.ApiClientTests;
         [Fact]
         public async Task TestClient()
         {
-            var tokenClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+            var tokenClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
         string name = TestUtils.GetRandomName("TokenClient");
         string code = TestUtils.GetRandomName("Code");
         _testOutputHelper.WriteLine($"test with token name {name}");
@@ -40,7 +40,7 @@ namespace Casdoor.Client.UnitTests.ApiClientTests;
             byte[] chanllengeCodeEncoded = sha256Instance.ComputeHash(bytes);
             string chanllengeCodeBase64Encoded = Convert.ToBase64String(chanllengeCodeEncoded).Replace("+", "-").Replace("/", "_").Replace("=", "");
 
-            CasdoorToken token = new CasdoorToken()
+            var token = new CasdoorToken()
             {
                 Owner = owner,
                 Name = name,
@@ -55,8 +55,8 @@ namespace Casdoor.Client.UnitTests.ApiClientTests;
             };
 
             // Add the object
-            Task<CasdoorResponse?> responseAsync = tokenClient.AddTokenAsync(token);
-            CasdoorResponse? response = await responseAsync;
+            var responseAsync = tokenClient.AddTokenAsync(token);
+            var response = TestUtils.AssertNotNull(await responseAsync);
             _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
             Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 

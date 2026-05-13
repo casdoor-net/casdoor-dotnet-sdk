@@ -44,7 +44,7 @@ ConsoleExtension.JsonWriteLine(new
 
 var token = await client.RequestPasswordTokenAsync("admin", "123");
 ConsoleExtension.WriteLine("Get tokens by username and password...");
-if (token is null)
+if (token?.AccessToken is null)
 {
     Console.WriteLine("Failed to get the token.");
     return;
@@ -66,7 +66,7 @@ if (user is null)
 var res = await client.SetPasswordAsync(user, "123", "123"); // Switch to your own account and modify the password.
 Console.WriteLine($"The status of password setting: {res?.Status}");
 
-if (token.IsError is false)
+if (!token.IsError)
 {
     ConsoleExtension.JsonWriteLine(new
     {
@@ -80,5 +80,5 @@ if (token.IsError is false)
 }
 else
 {
-    ConsoleExtension.WriteLine(token.Error, ConsoleColor.Red);
+    ConsoleExtension.WriteLine(token.Error ?? "(error)", ConsoleColor.Red);
 }

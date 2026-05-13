@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -26,7 +26,7 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
         [Fact]
         public async Task TestRole()
         {
-            var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+            var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
 
             const string ownerName = "admin";
             string name = TestUtils.GetRandomName("Role");
@@ -42,18 +42,18 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
             };
 
             // Add a new object
-            Task<CasdoorResponse?> responseAsync = userClient.AddRoleAsync(role);
-            CasdoorResponse? response = await responseAsync;
+            var responseAsync = userClient.AddRoleAsync(role);
+            var response = TestUtils.AssertNotNull(await responseAsync);
             _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
             Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
             // Get all objects, check if our added object is inside the list
-            Task<IEnumerable<CasdoorRole>?> rolesAsync = userClient.GetRolesAsync();
-            IEnumerable<CasdoorRole>? getRoles = await rolesAsync;
+            var rolesAsync = userClient.GetRolesAsync();
+            var getRoles = TestUtils.AssertNotNull(await rolesAsync);
             Assert.True(getRoles.Any());
             _testOutputHelper.WriteLine($"{getRoles.Count()}");
             bool found = false;
-            foreach (CasdoorRole casdoorRole in getRoles)
+            foreach (var casdoorRole in getRoles)
             {
                 _testOutputHelper.WriteLine(casdoorRole.Name);
                 if (casdoorRole.Name == name)
@@ -65,8 +65,8 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
             Assert.True(found);
 
             // Get the object
-            Task<CasdoorRole?> roleAsync = userClient.GetRoleAsync(name);
-            CasdoorRole? getRole = await roleAsync;
+            var roleAsync = userClient.GetRoleAsync(name);
+            var getRole = TestUtils.AssertNotNull(await roleAsync);
             Assert.Equal(name, getRole.Name);
 
             // Update the object
@@ -75,23 +75,23 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
 
             // Update the object
             responseAsync = userClient.UpdateRoleAsync(role, role.Name);
-            response = await responseAsync;
+            response = TestUtils.AssertNotNull(await responseAsync);
             Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
             // Validate the update
             roleAsync = userClient.GetRoleAsync(name);
-            getRole = await roleAsync;
+            getRole = TestUtils.AssertNotNull(await roleAsync);
             Assert.Equal(updatedDescription, getRole.Description);
 
             // Delete the object
             responseAsync = userClient.DeleteRoleAsync(getRole);
-            response = await responseAsync;
+            response = TestUtils.AssertNotNull(await responseAsync);
             Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
             // Validate the deletion
             roleAsync = userClient.GetRoleAsync(name);
-            getRole = await roleAsync;
-            Assert.Null(getRole);
+            var deletedRole = await roleAsync;
+            Assert.Null(deletedRole);
         }
     }
 }

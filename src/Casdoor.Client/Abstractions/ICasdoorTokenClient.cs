@@ -29,7 +29,7 @@ public interface ICasdoorTokenClient
     public Task<IEnumerable<CasdoorToken>?> GetTokensAsync(string owner,CancellationToken cancellationToken = default);
     public Task<IEnumerable<CasdoorToken>?> GetPaginationTokensAsync(string owner, int pageSize, int p,
         List<KeyValuePair<string, string?>>? queryMap, CancellationToken cancellationToken = default);
-    public Task<CasdoorResponse?> UpdateTokenAsync(CasdoorToken casdoorToken, IEnumerable<string> propertyNames, CancellationToken cancellationToken = default);
-    public Task<CasdoorResponse?> UpdateTokenColumnsAsync(CasdoorToken token, IEnumerable<string>? columns, CancellationToken cancellationToken = default);
+    public Task<CasdoorResponse?> UpdateTokenAsync(CasdoorToken casdoorToken, IEnumerable<string>? propertyNames = default, CancellationToken cancellationToken = default);
+    public Task<CasdoorResponse?> UpdateTokenColumnsAsync(CasdoorToken token, IEnumerable<string>? columns = default, CancellationToken cancellationToken = default);
 
 }

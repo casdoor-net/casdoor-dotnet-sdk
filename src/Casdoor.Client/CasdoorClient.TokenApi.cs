@@ -42,7 +42,7 @@ public partial class CasdoorClient
 
     public virtual async Task<TokenResponse> RequestPasswordTokenAsync(string username, string password, CancellationToken cancellationToken = default)
     {
-        var request = new PasswordTokenRequest {UserName = username, Password = password};
+        var request = new PasswordTokenRequest { UserName = username, Password = password };
         request = await ApplyConfigurationAsync(request, cancellationToken);
         return await _httpClient.RequestPasswordTokenAsync(request, cancellationToken: cancellationToken);
     }
@@ -52,7 +52,10 @@ public partial class CasdoorClient
     {
         var request = new AuthorizationCodeTokenRequest
         {
-            Code = code, RedirectUri = redirectUri, CodeVerifier = codeVerifier, ClientId = _options.ClientId
+            Code = code,
+            RedirectUri = redirectUri,
+            CodeVerifier = codeVerifier,
+            ClientId = _options.ClientId
         };
         request = await ApplyConfigurationAsync(request, cancellationToken);
         return await _httpClient.RequestAuthorizationCodeTokenAsync(request, cancellationToken: cancellationToken);
@@ -60,7 +63,7 @@ public partial class CasdoorClient
 
     public virtual async Task<TokenResponse> RequestRefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
     {
-        var request = new RefreshTokenRequest {RefreshToken = refreshToken};
+        var request = new RefreshTokenRequest { RefreshToken = refreshToken };
         request = await ApplyConfigurationAsync(request, cancellationToken);
         return await _httpClient.RequestRefreshTokenAsync(request, cancellationToken: cancellationToken);
     }
@@ -144,10 +147,10 @@ public partial class CasdoorClient
         return result.DeserializeData<IEnumerable<CasdoorToken>?>();
     }
 
-    public virtual Task<CasdoorResponse?> UpdateTokenAsync(CasdoorToken token, IEnumerable<string> propertyNames, CancellationToken cancellationToken = default)
+    public virtual Task<CasdoorResponse?> UpdateTokenAsync(CasdoorToken token, IEnumerable<string>? propertyNames = default, CancellationToken cancellationToken = default)
         => ModifyTokenAsync("update-token", token, propertyNames, cancellationToken: cancellationToken);
 
-    public virtual Task<CasdoorResponse?> UpdateTokenColumnsAsync(CasdoorToken token, IEnumerable<string>? columns, CancellationToken cancellationToken = default)
+    public virtual Task<CasdoorResponse?> UpdateTokenColumnsAsync(CasdoorToken token, IEnumerable<string>? columns = default, CancellationToken cancellationToken = default)
         => ModifyTokenAsync("update-token", token, columns, cancellationToken: cancellationToken);
 
     private Task<CasdoorResponse?> ModifyTokenAsync(string action, CasdoorToken token, IEnumerable<string>? columns, string? owner = null, CancellationToken cancellationToken = default)

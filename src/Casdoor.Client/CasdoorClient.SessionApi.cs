@@ -28,8 +28,8 @@ public partial class CasdoorClient
     public virtual Task<CasdoorResponse?> UpdateSessionAsync(CasdoorSession session, CancellationToken cancellationToken = default)
     => ModifySessionAsync("update-session", session, null, cancellationToken: cancellationToken);
 
-    public virtual Task<CasdoorResponse?> UpdateSessionForColumnsAsync(CasdoorSession session, IEnumerable<string> columns, CancellationToken cancellationToken = default)
-    => ModifySessionAsync("update-session", session, null, cancellationToken: cancellationToken);
+    public virtual Task<CasdoorResponse?> UpdateSessionForColumnsAsync(CasdoorSession session, IEnumerable<string>? columns=default, CancellationToken cancellationToken = default)
+    => ModifySessionAsync("update-session", session, columns, cancellationToken: cancellationToken);
 
     public virtual Task<CasdoorResponse?> DeleteSessionAsync(CasdoorSession session, CancellationToken cancellationToken = default)
     => ModifySessionAsync("delete-session", session, null, cancellationToken: cancellationToken);
@@ -65,7 +65,7 @@ public partial class CasdoorClient
         return result.DeserializeData<IEnumerable<CasdoorSession>?>();
     }
 
-    private Task<CasdoorResponse?> ModifySessionAsync(string action, CasdoorSession session, IEnumerable<string>? columns, string? owner = null, CancellationToken cancellationToken = default)
+    private Task<CasdoorResponse?> ModifySessionAsync(string action, CasdoorSession session, IEnumerable<string>? columns = default, string? owner = null, CancellationToken cancellationToken = default)
     {
         var queryMapBuilder = new QueryMapBuilder().Add("id", $"{session.Owner}/{session.Name}");
 

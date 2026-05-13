@@ -62,7 +62,7 @@ public partial class CasdoorClient
         return result.DeserializeData<IEnumerable<CasdoorProduct>?>();
     }
 
-    private Task<CasdoorResponse?> ModifyProductAsync(string action, CasdoorProduct product, IEnumerable<string>? columns, string? owner = null, CancellationToken cancellationToken = default)
+    private Task<CasdoorResponse?> ModifyProductAsync(string action, CasdoorProduct product, IEnumerable<string>? columns = default, string? owner = null, CancellationToken cancellationToken = default)
     {
         var queryMapBuilder = new QueryMapBuilder().Add("id", $"{product.Owner}/{product.Name}");
 

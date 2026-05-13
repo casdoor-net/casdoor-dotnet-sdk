@@ -34,7 +34,7 @@ public partial class CasdoorClient
         return PostAsJsonAsync(url, adapter, cancellationToken);
     }
 
-    public virtual async Task<CasdoorAdapter?> GetAdapterAsync(string owner,string name, CancellationToken cancellationToken = default)
+    public virtual async Task<CasdoorAdapter?> GetAdapterAsync(string owner, string name, CancellationToken cancellationToken = default)
     {
         var queryMap = new QueryMapBuilder()
             .Add("id", $"{owner}/{name}").QueryMap;
@@ -65,13 +65,13 @@ public partial class CasdoorClient
         return result.DeserializeData<IEnumerable<CasdoorAdapter>?>();
     }
 
-    public virtual Task<CasdoorResponse?> UpdateAdapterAsync(CasdoorAdapter adapter, IEnumerable<string> propertyNames, CancellationToken cancellationToken = default)
+    public virtual Task<CasdoorResponse?> UpdateAdapterAsync(CasdoorAdapter adapter, IEnumerable<string>? propertyNames = default, CancellationToken cancellationToken = default)
         => ModifyAdapterAsync("update-adapter", adapter, propertyNames, cancellationToken: cancellationToken);
 
-    public virtual Task<CasdoorResponse?> UpdateAdapterColumnsAsync(CasdoorAdapter adapter, IEnumerable<string>? columns, CancellationToken cancellationToken = default)
+    public virtual Task<CasdoorResponse?> UpdateAdapterColumnsAsync(CasdoorAdapter adapter, IEnumerable<string>? columns = default, CancellationToken cancellationToken = default)
         => ModifyAdapterAsync("update-adapter", adapter, columns, cancellationToken: cancellationToken);
 
-    private Task<CasdoorResponse?> ModifyAdapterAsync(string action, CasdoorAdapter adapter, IEnumerable<string>? columns, string? owner = null, CancellationToken cancellationToken = default)
+    private Task<CasdoorResponse?> ModifyAdapterAsync(string action, CasdoorAdapter adapter, IEnumerable<string>? columns = default, string? owner = null, CancellationToken cancellationToken = default)
     {
         var queryMapBuilder = new QueryMapBuilder().Add("id", $"{adapter.Owner}/{adapter.Name}");
 

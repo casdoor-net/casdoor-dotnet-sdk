@@ -20,7 +20,7 @@ public class ApplicationTest : IClassFixture<ServicesFixture>
     [Fact]
     public async Task TestApplications()
     {
-        var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
 
         string appName = TestUtils.GetRandomName("Application");
         const string ownerName = CasdoorConstants.DefaultCasdoorOwner;
@@ -33,16 +33,16 @@ public class ApplicationTest : IClassFixture<ServicesFixture>
             Organization = "casbin"
         };
         // Add a new object
-        Task<CasdoorResponse?> responseAsync = userClient.AddApplicationAsync(application);
-        CasdoorResponse? response = await responseAsync;
+        var responseAsync = userClient.AddApplicationAsync(application);
+        var response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Get all objects, check if our added object is inside the list
-        Task<IEnumerable<CasdoorApplication>?> applicationsAsync = userClient.GetApplicationsAsync(ownerName);
-        IEnumerable<CasdoorApplication>? getApplications = await applicationsAsync;
+        var applicationsAsync = userClient.GetApplicationsAsync(ownerName);
+        var getApplications = TestUtils.AssertNotNull(await applicationsAsync);
         Assert.True(getApplications.Any());
         bool found = false;
-        foreach (CasdoorApplication casdoorApplication in getApplications)
+        foreach (var casdoorApplication in getApplications)
         {
             if (casdoorApplication.Name == appName)
             {
@@ -53,8 +53,8 @@ public class ApplicationTest : IClassFixture<ServicesFixture>
         Assert.True(found);
 
         // Get the object
-        Task<CasdoorApplication?> applicationAsync = userClient.GetApplicationAsync($"{ownerName}/{appName}");
-        CasdoorApplication? getApplication = await applicationAsync;
+        var applicationAsync = userClient.GetApplicationAsync($"{ownerName}/{appName}");
+        var getApplication = TestUtils.AssertNotNull(await applicationAsync);
         Assert.Equal(appName, getApplication.Name);
         //Update the object
         const string updateDescription = "Update Casdoor Website";
@@ -62,20 +62,20 @@ public class ApplicationTest : IClassFixture<ServicesFixture>
         // Update the object
         responseAsync =
             userClient.UpdateApplicationAsync($"{ownerName}/{appName}", getApplication);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the update
         applicationAsync = userClient.GetApplicationAsync($"{ownerName}/{appName}");
-        getApplication = await applicationAsync;
+        getApplication = TestUtils.AssertNotNull(await applicationAsync);
         Assert.Equal(updateDescription, getApplication.Description);
 
         // Delete the object
         responseAsync = userClient.DeleteApplicationAsync(appName);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         applicationsAsync = userClient.GetOrganizationApplicationsAsync("casbin");
-        getApplications = await applicationsAsync;
+        getApplications = TestUtils.AssertNotNull(await applicationsAsync);
         Assert.True(getApplications.Any());
 
     }

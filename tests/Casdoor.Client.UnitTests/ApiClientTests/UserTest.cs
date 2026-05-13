@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Casdoor.Client.UnitTests.Fixtures;
 using Casdoor.Client.UnitTests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,13 +20,13 @@ public class UserTest : IClassFixture<ServicesFixture>
     [Fact]
     public async Task TestUser()
     {
-        var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
         string name = TestUtils.GetRandomName("User");
         _testOutputHelper.WriteLine($"test with username {name}");
         string appName = $"admin/{name}";
         string owner = "casbin";
 
-        CasdoorUser user = new CasdoorUser()
+        var user = new CasdoorUser()
         {
             Owner = owner,
             Name = name,
@@ -35,18 +35,18 @@ public class UserTest : IClassFixture<ServicesFixture>
         };
 
         // Add the object
-        Task<CasdoorResponse?> responseAsync = userClient.AddUserAsync(user);
-        CasdoorResponse? response = await responseAsync;
+        var responseAsync = userClient.AddUserAsync(user);
+        var response = TestUtils.AssertNotNull(await responseAsync);
         _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Get all objects, check if our added object is inside the list
-        Task<IEnumerable<CasdoorUser>?> userAsyncs = userClient.GetUsersAsync(owner);
-        IEnumerable<CasdoorUser>? getUsers = await userAsyncs;
+        var userAsyncs = userClient.GetUsersAsync(owner);
+        var getUsers = TestUtils.AssertNotNull(await userAsyncs);
         Assert.True(getUsers.Any());
         _testOutputHelper.WriteLine($"{getUsers.Count()}");
         bool found = false;
-        foreach (CasdoorUser casdoorUser in getUsers)
+        foreach (var casdoorUser in getUsers)
         {
             _testOutputHelper.WriteLine(casdoorUser.Name);
             if (casdoorUser.Name == name)
@@ -58,36 +58,36 @@ public class UserTest : IClassFixture<ServicesFixture>
         Assert.True(found);
 
         // Get the object
-        Task<CasdoorUser?> userAsync = userClient.GetUserAsync(name, owner);
-        CasdoorUser? getUser = await userAsync;
+        var userAsync = userClient.GetUserAsync(name, owner);
+        var getUser = TestUtils.AssertNotNull(await userAsync);
         Assert.Equal(name, getUser.Name);
 
         // Update the object
         getUser.DisplayName = "Updated Casdoor Website";
-        responseAsync = userClient.UpdateUserAsync(getUser, null);
-        response = await responseAsync;
+        responseAsync = userClient.UpdateUserAsync(getUser);
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Validate the update
         userAsync = userClient.GetUserAsync(name, owner);
-        getUser = await userAsync;
+        getUser = TestUtils.AssertNotNull(await userAsync);
         Assert.Equal("Updated Casdoor Website", getUser.DisplayName);
 
         // Delete the object
         responseAsync = userClient.DeleteUserAsync(user.Name);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Validate the deletion
         userAsync = userClient.GetUserAsync(name, owner);
-        getUser = await userAsync;
-        Assert.Null(getUser);
+        var deletedUser = await userAsync;
+        Assert.Null(deletedUser);
     }
 
     [Fact]
     public async Task TestUserPagination()
     {
-        var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
         string owner = "casbin";
 
         // Test pagination

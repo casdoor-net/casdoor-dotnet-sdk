@@ -30,11 +30,10 @@ public partial class CasdoorClient
         => ModifyPermissionAsync("update-permission", permission, null);
 
 
-    public virtual Task<CasdoorResponse?> UpdatePermissionAsyncForCoulums(CasdoorPermission permission, IEnumerable<string>? columns,
-        CancellationToken cancellationToken = default)
+    public virtual Task<CasdoorResponse?> UpdatePermissionAsyncForCoulums(CasdoorPermission permission, IEnumerable<string>? columns = default, CancellationToken cancellationToken = default)
         => ModifyPermissionAsync("update-permission", permission, columns);
 
-    private Task<CasdoorResponse?> ModifyPermissionAsync(string action, CasdoorPermission permission, IEnumerable<string>? columns, string? owner = null, CancellationToken cancellationToken = default)
+    private Task<CasdoorResponse?> ModifyPermissionAsync(string action, CasdoorPermission permission, IEnumerable<string>? columns = default, string? owner = null, CancellationToken cancellationToken = default)
     {
         var queryMapBuilder = new QueryMapBuilder().Add("id", $"{permission.Owner}/{permission.Name}");
 

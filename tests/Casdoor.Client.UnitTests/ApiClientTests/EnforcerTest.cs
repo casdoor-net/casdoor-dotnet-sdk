@@ -20,7 +20,7 @@ public class EnforcerTest : IClassFixture<ServicesFixture>
     [Fact]
     public async Task TestEnforcer()
     {
-        var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
 
         string appName = TestUtils.GetRandomName("enforcer");
         const string ownerName = "casbin";
@@ -37,16 +37,16 @@ public class EnforcerTest : IClassFixture<ServicesFixture>
         };
         // Add a new object
 
-        Task<CasdoorResponse?> responseAsync = userClient.AddEnforcerAsync(enforcer);
-        CasdoorResponse? response = await responseAsync;
+        var responseAsync = userClient.AddEnforcerAsync(enforcer);
+        var response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         _testOutputHelper.WriteLine(response.Status);
         // Get all objects, check if our added object is inside the list
-        Task<IEnumerable<CasdoorEnforcer>?> enforcesAsync = userClient.GetEnforcersAsync();
-        IEnumerable<CasdoorEnforcer>? getEnforcers = await enforcesAsync;
+        var enforcesAsync = userClient.GetEnforcersAsync();
+        var getEnforcers = TestUtils.AssertNotNull(await enforcesAsync);
         Assert.True(getEnforcers.Any());
         bool found = false;
-        foreach (CasdoorEnforcer casdoorEnforcer in getEnforcers)
+        foreach (var casdoorEnforcer in getEnforcers)
         {
             _testOutputHelper.WriteLine(casdoorEnforcer.Name);
             if (casdoorEnforcer.Name == appName)
@@ -58,8 +58,8 @@ public class EnforcerTest : IClassFixture<ServicesFixture>
         Assert.True(found);
 
         // Get the object
-        Task<CasdoorEnforcer?> enforcerAsync = userClient.GetEnforcerAsync($"{appName}");
-        CasdoorEnforcer? getEnforcer = await enforcerAsync;
+        var enforcerAsync = userClient.GetEnforcerAsync($"{appName}");
+        var getEnforcer = TestUtils.AssertNotNull(await enforcerAsync);
         Assert.Equal(appName, getEnforcer.Name);
         //Update the object
         const string updateDescription = "Update Casdoor Website";
@@ -67,21 +67,21 @@ public class EnforcerTest : IClassFixture<ServicesFixture>
         // Update the object
         responseAsync =
             userClient.UpdateEnforcerAsync(enforcer, $"{ownerName}/{appName}");
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the update
         enforcerAsync = userClient.GetEnforcerAsync($"{appName}");
-        getEnforcer = await enforcerAsync;
+        getEnforcer = TestUtils.AssertNotNull(await enforcerAsync);
         Assert.Equal(updateDescription, getEnforcer.Description);
 
         // Delete the object
         responseAsync = userClient.DeleteEnforcerAsync(enforcer);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the deletion
         enforcerAsync = userClient.GetEnforcerAsync($"{appName}");
-        getEnforcer = await enforcerAsync;
-        Assert.Null(getEnforcer);
+        var deletedEnforcer = await enforcerAsync;
+        Assert.Null(deletedEnforcer);
 
     }
 }

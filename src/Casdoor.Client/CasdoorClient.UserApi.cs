@@ -88,10 +88,10 @@ public partial class CasdoorClient
         return ModifyUserAsync("update-user", user, null, cancellationToken: cancellationToken);
     }
 
-    public virtual Task<CasdoorResponse?> UpdateUserForColumns(CasdoorUser user, IEnumerable<string> columns, CancellationToken cancellationToken)
+    public virtual Task<CasdoorResponse?> UpdateUserForColumns(CasdoorUser user, IEnumerable<string>? columns = default, CancellationToken cancellationToken = default)
         => ModifyUserAsync("update-user", user, columns, cancellationToken: cancellationToken);
 
-    public virtual Task<CasdoorResponse?> UpdateUserAsync(CasdoorUser user, IEnumerable<string> propertyNames, CancellationToken cancellationToken = default)
+    public virtual Task<CasdoorResponse?> UpdateUserAsync(CasdoorUser user, IEnumerable<string>? propertyNames = default, CancellationToken cancellationToken = default)
         => ModifyUserAsync("update-user", user, propertyNames, cancellationToken: cancellationToken);
 
     public Task<CasdoorResponse?> UpdateUserForbiddenFlagAsync(CasdoorUser user, CancellationToken cancellationToken = default)
@@ -141,7 +141,7 @@ public partial class CasdoorClient
         return await ModifyUserAsync("check-user-password", user, null, cancellationToken: cancellationToken);
     }
 
-    private Task<CasdoorResponse?> ModifyUserAsync(string action, CasdoorUser user, IEnumerable<string>? columns, string? owner = null, CancellationToken cancellationToken = default)
+    private Task<CasdoorResponse?> ModifyUserAsync(string action, CasdoorUser user, IEnumerable<string>? columns = default, string? owner = null, CancellationToken cancellationToken = default)
     {
         var queryMapBuilder = new QueryMapBuilder().Add("id", $"{user.Owner}/{user.Name}");
 

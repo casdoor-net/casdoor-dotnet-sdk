@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Casdoor.Client.UnitTests.Fixtures;
 using Casdoor.Client.UnitTests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,12 +20,12 @@ public class TokenTest : IClassFixture<ServicesFixture>
     [Fact]
     public async Task TestToken()
     {
-        var tokenClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var tokenClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
         string name = TestUtils.GetRandomName("Token");
         _testOutputHelper.WriteLine($"test with token name {name}");
         string owner = "admin";
 
-        CasdoorToken token = new CasdoorToken()
+        var token = new CasdoorToken()
         {
             Owner = owner,
             Name = name,
@@ -36,20 +36,20 @@ public class TokenTest : IClassFixture<ServicesFixture>
         };
 
         // Add the object
-        Task<CasdoorResponse?> responseAsync = tokenClient.AddTokenAsync(token);
-        CasdoorResponse? response = await responseAsync;
+        var responseAsync = tokenClient.AddTokenAsync(token);
+        var response = TestUtils.AssertNotNull(await responseAsync);
         _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         await Task.Delay(1000);
 
         // Get all objects, check if our added object is inside the list
-        Task<IEnumerable<CasdoorToken>?> tokenAsyncs = tokenClient.GetTokensAsync(owner);
-        IEnumerable<CasdoorToken>? getTokens = await tokenAsyncs;
+        var tokenAsyncs = tokenClient.GetTokensAsync(owner);
+        var getTokens = TestUtils.AssertNotNull(await tokenAsyncs);
         Assert.True(getTokens.Any());
         _testOutputHelper.WriteLine($"{getTokens.Count()}");
         bool found = false;
-        foreach (CasdoorToken casdoorToken in getTokens)
+        foreach (var casdoorToken in getTokens)
         {
             _testOutputHelper.WriteLine(casdoorToken.Name);
             if (casdoorToken.Name == name)
@@ -61,25 +61,25 @@ public class TokenTest : IClassFixture<ServicesFixture>
         Assert.True(found);
 
         // Get the object
-        Task<CasdoorToken?> tokenAsync = tokenClient.GetTokenAsync(owner, name);
-        CasdoorToken? getToken = await tokenAsync;
+        var tokenAsync = tokenClient.GetTokenAsync(owner, name);
+        var getToken = TestUtils.AssertNotNull(await tokenAsync);
         Assert.Equal(name, getToken.Name);
 
         // Update the object
         string updatedCode = "Updated Code";
         getToken.Code = updatedCode;
         responseAsync = tokenClient.UpdateTokenAsync(getToken, new List<string>());
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Validate the update
         tokenAsync = tokenClient.GetTokenAsync(owner, name);
-        getToken = await tokenAsync;
+        getToken = TestUtils.AssertNotNull(await tokenAsync);
         Assert.Equal(updatedCode, getToken.Code);
 
         // Delete the object
         responseAsync = tokenClient.DeleteTokenAsync(token);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Validate the deletion
@@ -88,8 +88,8 @@ public class TokenTest : IClassFixture<ServicesFixture>
         var ex = await Assert.ThrowsAsync<CasdoorApiException>(
             async () =>
             {
-                getToken = await tokenAsync;
-                Assert.Null(getToken);
+                var missing = await tokenAsync;
+                Assert.Null(missing);
             });
         Assert.Equal($"The token: {owner}/{name} does not exist", ex.Message);
     }

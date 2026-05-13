@@ -20,7 +20,7 @@ public class ModelTest : IClassFixture<ServicesFixture>
     [Fact]
     public async Task TestModel()
     {
-        var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
 
         string appName = TestUtils.GetRandomName("model");
         const string ownerName = "casbin";
@@ -48,16 +48,16 @@ m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act";
         };
         // Add a new object
 
-        Task<CasdoorResponse?> responseAsync = userClient.AddModelAsync(model);
-        CasdoorResponse? response = await responseAsync;
+        var responseAsync = userClient.AddModelAsync(model);
+        var response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         _testOutputHelper.WriteLine(response.Status);
         // Get all objects, check if our added object is inside the list
-        Task<IEnumerable<CasdoorModel>?> modelsAsync = userClient.GetModelsAsync();
-        IEnumerable<CasdoorModel>? getModels = await modelsAsync;
+        var modelsAsync = userClient.GetModelsAsync();
+        var getModels = TestUtils.AssertNotNull(await modelsAsync);
         Assert.True(getModels.Any());
         bool found = false;
-        foreach (CasdoorModel casdoorModel in getModels)
+        foreach (var casdoorModel in getModels)
         {
             _testOutputHelper.WriteLine(casdoorModel.Name);
             if (casdoorModel.Name == appName)
@@ -69,8 +69,8 @@ m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act";
         Assert.True(found);
 
         // Get the object
-        Task<CasdoorModel?> modelAsync = userClient.GetModelAsync($"{appName}");
-        CasdoorModel? getModel = await modelAsync;
+        var modelAsync = userClient.GetModelAsync($"{appName}");
+        var getModel = TestUtils.AssertNotNull(await modelAsync);
         Assert.Equal(appName, getModel.Name);
         //Update the object
         const string updateDescription = "Update Casdoor Website";
@@ -78,21 +78,21 @@ m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act";
         // Update the object
         responseAsync =
             userClient.UpdateModelAsync(model, $"{ownerName}/{appName}");
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the update
         modelAsync = userClient.GetModelAsync($"{appName}");
-        getModel = await modelAsync;
+        getModel = TestUtils.AssertNotNull(await modelAsync);
         Assert.Equal(updateDescription, getModel.Description);
 
         // Delete the object
         responseAsync = userClient.DeleteModelAsync(model);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the deletion
         modelAsync = userClient.GetModelAsync($"{appName}");
-        getModel = await modelAsync;
-        Assert.Null(getModel);
+        var deletedModel = await modelAsync;
+        Assert.Null(deletedModel);
 
     }
 }

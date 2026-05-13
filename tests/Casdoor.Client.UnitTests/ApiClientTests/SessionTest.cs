@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -26,7 +26,7 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
         [Fact]
         public async Task TestSession()
         {
-            var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+            var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
 
             const string ownerName = "casbin";
             string name = TestUtils.GetRandomName("Session");
@@ -41,18 +41,18 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
             };
 
             // Add a new object
-            Task<CasdoorResponse?> responseAsync = userClient.AddSessionAsync(session);
-            CasdoorResponse? response = await responseAsync;
+            var responseAsync = userClient.AddSessionAsync(session);
+            var response = TestUtils.AssertNotNull(await responseAsync);
             _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
             Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
             // Get all objects, check if our added object is inside the list
-            Task<IEnumerable<CasdoorSession>?> sessionsAsync = userClient.GetSessionsAsync();
-            IEnumerable<CasdoorSession>? getSessions = await sessionsAsync;
+            var sessionsAsync = userClient.GetSessionsAsync();
+            var getSessions = TestUtils.AssertNotNull(await sessionsAsync);
             Assert.True(getSessions.Any());
             _testOutputHelper.WriteLine($"{getSessions.Count()}");
             bool found = false;
-            foreach (CasdoorSession casdoorSession in getSessions)
+            foreach (var casdoorSession in getSessions)
             {
                 _testOutputHelper.WriteLine(casdoorSession.Name);
                 if (casdoorSession.Name == name)
@@ -64,8 +64,8 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
             Assert.True(found);
 
             // Get the object
-            Task<CasdoorSession?> sessionAsync = userClient.GetSessionAsync(name, session.Application);
-            CasdoorSession? getSession = await sessionAsync;
+            var sessionAsync = userClient.GetSessionAsync(name, session.Application);
+            var getSession = TestUtils.AssertNotNull(await sessionAsync);
             Assert.Equal(name, getSession.Name);
 
             // Update the object
@@ -74,23 +74,23 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
 
             // Update the object
             responseAsync = userClient.UpdateSessionAsync(session);
-            response = await responseAsync;
+            response = TestUtils.AssertNotNull(await responseAsync);
             Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
             // Validate the update
             sessionAsync = userClient.GetSessionAsync(name, session.Application);
-            getSession = await sessionAsync;
+            getSession = TestUtils.AssertNotNull(await sessionAsync);
             Assert.Equal(updatedTime, getSession.CreatedTime);
 
             // Delete the object
             responseAsync = userClient.DeleteSessionAsync(getSession);
-            response = await responseAsync;
+            response = TestUtils.AssertNotNull(await responseAsync);
             Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
             // Validate the deletion
             sessionAsync = userClient.GetSessionAsync(name, session.Application);
-            getSession = await sessionAsync;
-            Assert.Null(getSession);
+            var deletedSession = await sessionAsync;
+            Assert.Null(deletedSession);
         }
     }
 }

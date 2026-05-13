@@ -68,7 +68,7 @@ public partial class CasdoorClient
         => ModifyCertAsync("update-cert", cert, null, cancellationToken: cancellationToken);
 
 
-    private Task<CasdoorResponse?> ModifyCertAsync(string action, CasdoorCert cert, IEnumerable<string>? columns, string? owner = null, CancellationToken cancellationToken = default)
+    private Task<CasdoorResponse?> ModifyCertAsync(string action, CasdoorCert cert, IEnumerable<string>? columns = default, string? owner = null, CancellationToken cancellationToken = default)
     {
         var queryMapBuilder = new QueryMapBuilder().Add("id", $"{cert.Owner}/{cert.Name}");
 

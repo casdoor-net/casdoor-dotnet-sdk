@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -26,7 +26,7 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
         [Fact]
         public async Task TestProvider()
         {
-            var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+            var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
 
             const string ownerName = "admin";
             string name = TestUtils.GetRandomName("Provider");
@@ -42,18 +42,18 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
             };
 
             // Add a new object
-            Task<CasdoorResponse?> responseAsync = userClient.AddProviderAsync(provider);
-            CasdoorResponse? response = await responseAsync;
+            var responseAsync = userClient.AddProviderAsync(provider);
+            var response = TestUtils.AssertNotNull(await responseAsync);
             _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
             Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
             // Get all objects, check if our added object is inside the list
-            Task<IEnumerable<CasdoorProvider>?> providersAsync = userClient.GetProvidersAsync();
-            IEnumerable<CasdoorProvider>? getProviders = await providersAsync;
+            var providersAsync = userClient.GetProvidersAsync();
+            var getProviders = TestUtils.AssertNotNull(await providersAsync);
             Assert.True(getProviders.Any());
             _testOutputHelper.WriteLine($"{getProviders.Count()}");
             bool found = false;
-            foreach (CasdoorProvider casdoorProvider in getProviders)
+            foreach (var casdoorProvider in getProviders)
             {
                 _testOutputHelper.WriteLine(casdoorProvider.Name);
                 if (casdoorProvider.Name == name)
@@ -65,8 +65,8 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
             Assert.True(found);
 
             // Get the object
-            Task<CasdoorProvider?> providerAsync = userClient.GetProviderAsync(name);
-            CasdoorProvider? getProvider = await providerAsync;
+            var providerAsync = userClient.GetProviderAsync(name);
+            var getProvider = TestUtils.AssertNotNull(await providerAsync);
             Assert.Equal(name, getProvider.Name);
 
             // Update the object
@@ -75,23 +75,23 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
 
             // Update the object
             responseAsync = userClient.UpdateProviderAsync(provider.Name, provider);
-            response = await responseAsync;
+            response = TestUtils.AssertNotNull(await responseAsync);
             Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
             // Validate the update
             providerAsync = userClient.GetProviderAsync(name);
-            getProvider = await providerAsync;
+            getProvider = TestUtils.AssertNotNull(await providerAsync);
             Assert.Equal(updatedDisplayName, getProvider.DisplayName);
 
             // Delete the object
             responseAsync = userClient.DeleteProviderAsync(name);
-            response = await responseAsync;
+            response = TestUtils.AssertNotNull(await responseAsync);
             Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
             // Validate the deletion
             providerAsync = userClient.GetProviderAsync(name);
-            getProvider = await providerAsync;
-            Assert.Null(getProvider);
+            var deletedProvider = await providerAsync;
+            Assert.Null(deletedProvider);
         }
     }
 }

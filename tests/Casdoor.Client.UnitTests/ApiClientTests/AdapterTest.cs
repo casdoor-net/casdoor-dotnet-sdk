@@ -25,7 +25,7 @@ public class AdapterTest : IClassFixture<ServicesFixture>
     [Fact]
     public async Task TestAdapter()
     {
-        var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
 
 
         const string ownerName = "admin";
@@ -42,18 +42,18 @@ public class AdapterTest : IClassFixture<ServicesFixture>
 
         // Add a new object
 
-        Task<CasdoorResponse?> responseAsync = userClient.AddAdapterAsync(adapter);
-        CasdoorResponse? response = await responseAsync;
+        var responseAsync = userClient.AddAdapterAsync(adapter);
+        var response = TestUtils.AssertNotNull(await responseAsync);
         _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Get all objects, check if our added object is inside the list
-        Task<IEnumerable<CasdoorAdapter>?> adaptersAsync = userClient.GetAdaptersAsync(ownerName);
-        IEnumerable<CasdoorAdapter>? getAdapters = await adaptersAsync;
+        var adaptersAsync = userClient.GetAdaptersAsync(ownerName);
+        var getAdapters = TestUtils.AssertNotNull(await adaptersAsync);
         Assert.True(getAdapters.Any());
         _testOutputHelper.WriteLine($"{getAdapters.Count()}");
         bool found = false;
-        foreach (CasdoorAdapter casdoorAdapter in getAdapters)
+        foreach (var casdoorAdapter in getAdapters)
         {
             _testOutputHelper.WriteLine(casdoorAdapter.Name);
             if (casdoorAdapter.Name == name)
@@ -65,29 +65,29 @@ public class AdapterTest : IClassFixture<ServicesFixture>
         Assert.True(found);
 
         // Get the object
-        Task<CasdoorAdapter?> adapterAsync = userClient.GetAdapterAsync(ownerName, name);
-        CasdoorAdapter? getAdapter = await adapterAsync;
+        var adapterAsync = userClient.GetAdapterAsync(ownerName, name);
+        var getAdapter = TestUtils.AssertNotNull(await adapterAsync);
         Assert.Equal(name, getAdapter.Name);
         //Update the object
         const string updatedUser = "Updated Casdoor Website";
         adapter.User = updatedUser;
         // Update the object
         responseAsync =
-            userClient.UpdateAdapterAsync(adapter, null);
-        response = await responseAsync;
+            userClient.UpdateAdapterAsync(adapter);
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the update
         adapterAsync = userClient.GetAdapterAsync(ownerName, name);
-        getAdapter = await adapterAsync;
+        getAdapter = TestUtils.AssertNotNull(await adapterAsync);
         Assert.Equal(updatedUser, getAdapter.User);
 
         // Delete the object
         responseAsync = userClient.DeleteAdapterAsync(ownerName, name);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the deletion
         adapterAsync = userClient.GetAdapterAsync(ownerName, name);
-        getAdapter = await adapterAsync;
-        Assert.Null(getAdapter);
+        var deletedAdapter = await adapterAsync;
+        Assert.Null(deletedAdapter);
     }
 }

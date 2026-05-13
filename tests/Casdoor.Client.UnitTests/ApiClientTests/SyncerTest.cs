@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -27,11 +27,11 @@ public class SyncerTest : IClassFixture<ServicesFixture>
     public async Task TestSyncer()
     {
 
-        var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
         string name = TestUtils.GetRandomName("Syncer");
         string appName = $"admin/{name}";
 
-        CasdoorSyncer syncer = new CasdoorSyncer()
+        var syncer = new CasdoorSyncer()
         {
             Owner = "admin",
             Name = name,
@@ -48,18 +48,18 @@ public class SyncerTest : IClassFixture<ServicesFixture>
         };
 
         // Add the object
-        Task<CasdoorResponse?> responseAsync = userClient.AddSyncerAsync(syncer);
-        CasdoorResponse? response = await responseAsync;
+        var responseAsync = userClient.AddSyncerAsync(syncer);
+        var response = TestUtils.AssertNotNull(await responseAsync);
         _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Get all objects, check if our added object is inside the list
-        Task<IEnumerable<CasdoorSyncer>?> syncerAsyncs = userClient.GetSyncersAsync("admin");
-        IEnumerable<CasdoorSyncer>? getSyncers = await syncerAsyncs;
+        var syncerAsyncs = userClient.GetSyncersAsync("admin");
+        var getSyncers = TestUtils.AssertNotNull(await syncerAsyncs);
         Assert.True(getSyncers.Any());
         _testOutputHelper.WriteLine($"{getSyncers.Count()}");
         bool found = false;
-        foreach (CasdoorSyncer casdoorSyncer in getSyncers)
+        foreach (var casdoorSyncer in getSyncers)
         {
             _testOutputHelper.WriteLine(casdoorSyncer.Name);
             if (casdoorSyncer.Name == name)
@@ -71,29 +71,29 @@ public class SyncerTest : IClassFixture<ServicesFixture>
         Assert.True(found);
 
         // Get the object
-        Task<CasdoorSyncer?> syncerAsync = userClient.GetSyncerAsync("admin", name);
-        CasdoorSyncer? getSyncer = await syncerAsync;
+        var syncerAsync = userClient.GetSyncerAsync("admin", name);
+        var getSyncer = TestUtils.AssertNotNull(await syncerAsync);
         Assert.Equal(name, getSyncer.Name);
 
         // Update the object
         getSyncer.SyncInterval = 200;
         responseAsync = userClient.UpdateSyncerAsync(getSyncer);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         //Validate the update
         syncerAsync = userClient.GetSyncerAsync("admin", name);
-        getSyncer = await syncerAsync;
+        getSyncer = TestUtils.AssertNotNull(await syncerAsync);
         Assert.Equal(200, getSyncer.SyncInterval);
 
         // Delete the object
         responseAsync = userClient.DeleteSyncerAsync(syncer);
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the deletion
         syncerAsync = userClient.GetSyncerAsync("admin", name);
-        getSyncer = await syncerAsync;
-        Assert.Null(getSyncer);
+        var deletedSyncer = await syncerAsync;
+        Assert.Null(deletedSyncer);
 
     }
 }

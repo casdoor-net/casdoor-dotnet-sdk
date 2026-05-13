@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,12 +24,12 @@ public class OrganizationTest : IClassFixture<ServicesFixture>
     [Fact]
     public async Task TestOrganization()
     {
-        var organizationClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var organizationClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
         string name = TestUtils.GetRandomName("Organization");
         _testOutputHelper.WriteLine($"test with organization name {name}");
         string owner = "admin";
 
-        CasdoorOrganization organization = new CasdoorOrganization()
+        var organization = new CasdoorOrganization()
         {
             Owner = owner,
             Name = name,
@@ -47,14 +47,16 @@ public class OrganizationTest : IClassFixture<ServicesFixture>
         };
 
         // Add the object
-        Task<CasdoorResponse?> responseAsync = organizationClient.AddOrganizationAsync(organization);
-        CasdoorResponse? response = await responseAsync;
+        var responseAsync = organizationClient.AddOrganizationAsync(organization);
+        var response = await responseAsync;
+        Assert.NotNull(response);
         _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Get the object
-        Task<CasdoorOrganization?> organizationAsync = organizationClient.GetOrganizationAsync($"admin/{name}");
-        CasdoorOrganization? getOrganization = await organizationAsync;
+        var organizationAsync = organizationClient.GetOrganizationAsync($"admin/{name}");
+        var getOrganization = await organizationAsync;
+        Assert.NotNull(getOrganization);
         Assert.Equal(name, getOrganization.Name);
 
         // Update the object
@@ -62,16 +64,19 @@ public class OrganizationTest : IClassFixture<ServicesFixture>
         getOrganization.DisplayName = updatedDisplayName;
         responseAsync = organizationClient.UpdateOrganizationAsync($"admin/{name}",getOrganization);
         response = await responseAsync;
+        Assert.NotNull(response);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Validate the update
         organizationAsync = organizationClient.GetOrganizationAsync($"admin/{name}");
         getOrganization = await organizationAsync;
+        Assert.NotNull(getOrganization);
         Assert.Equal(updatedDisplayName, getOrganization.DisplayName);
 
         // Delete the object
         responseAsync = organizationClient.DeleteOrganizationAsync(name);
         response = await responseAsync;
+        Assert.NotNull(response);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Validate the deletion

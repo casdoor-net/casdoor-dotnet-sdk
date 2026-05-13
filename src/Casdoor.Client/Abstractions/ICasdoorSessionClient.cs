@@ -18,7 +18,7 @@ public interface ICasdoorSessionClient
 {
     public Task<CasdoorResponse?> AddSessionAsync(CasdoorSession session, CancellationToken cancellationToken = default);
     public Task<CasdoorResponse?> UpdateSessionAsync(CasdoorSession session, CancellationToken cancellationToken = default);
-    public Task<CasdoorResponse?> UpdateSessionForColumnsAsync(CasdoorSession session,IEnumerable<string> columns, CancellationToken cancellationToken = default);
+    public Task<CasdoorResponse?> UpdateSessionForColumnsAsync(CasdoorSession session,IEnumerable<string>? columns = default, CancellationToken cancellationToken = default);
     public Task<CasdoorResponse?> DeleteSessionAsync(CasdoorSession session, CancellationToken cancellationToken = default);
     public Task<CasdoorSession?> GetSessionAsync(string name, string application, CancellationToken cancellationToken = default);
     public Task<IEnumerable<CasdoorSession>?> GetSessionsAsync(CancellationToken cancellationToken = default);

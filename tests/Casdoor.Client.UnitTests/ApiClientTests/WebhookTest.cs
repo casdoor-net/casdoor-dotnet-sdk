@@ -1,10 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using Casdoor.Client.UnitTests.Fixtures;
 using Casdoor.Client.UnitTests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,11 +20,11 @@ public class WebhookTest : IClassFixture<ServicesFixture>
     public async Task TestWebhook()
     {
 
-        var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
+        var userClient = _servicesFixture.ServiceProvider.GetRequiredService<ICasdoorClient>();
         string name = TestUtils.GetRandomName("Webhook");
         string appName = $"admin/{name}";
 
-        CasdoorWebhook webhook = new CasdoorWebhook()
+        var webhook = new CasdoorWebhook()
         {
             Owner= "casbin",
 		    Name = name,
@@ -40,18 +33,18 @@ public class WebhookTest : IClassFixture<ServicesFixture>
         };
 
         // Add the object
-        Task<CasdoorResponse?> responseAsync = userClient.AddWebhookAsync(webhook); 
-        CasdoorResponse? response = await responseAsync;
+        var responseAsync = userClient.AddWebhookAsync(webhook); 
+        var response = TestUtils.AssertNotNull(await responseAsync);
         _testOutputHelper.WriteLine($"{response.Status} {response.Msg}");
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         // Get all objects, check if our added object is inside the list
-        Task<IEnumerable<CasdoorWebhook>?> webhookAsyncs = userClient.GetWebhooksAsync("casbin"); 
-        IEnumerable<CasdoorWebhook>? getWebhooks = await webhookAsyncs;
+        var webhookAsyncs = userClient.GetWebhooksAsync("casbin"); 
+        var getWebhooks = TestUtils.AssertNotNull(await webhookAsyncs);
         Assert.True(getWebhooks.Any());
         _testOutputHelper.WriteLine($"{getWebhooks.Count()}");
         bool found = false;
-        foreach (CasdoorWebhook casdoorWebhook in getWebhooks)
+        foreach (var casdoorWebhook in getWebhooks)
         {
             _testOutputHelper.WriteLine(casdoorWebhook.Name);
             if (casdoorWebhook.Name == name)
@@ -63,29 +56,29 @@ public class WebhookTest : IClassFixture<ServicesFixture>
         Assert.True(found);
 
         // Get the object
-        Task<CasdoorWebhook?> webhookAsync = userClient.GetWebhookAsync("casbin", name);  
-        CasdoorWebhook? getWebhook = await webhookAsync;
+        var webhookAsync = userClient.GetWebhookAsync("casbin", name);  
+        var getWebhook = TestUtils.AssertNotNull(await webhookAsync);
         Assert.Equal(name, getWebhook.Name);
 
         // Update the object
         webhook.Organization = "admin";
         responseAsync = userClient.UpdateWebhookAsync(webhook); 
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
         //Validate the update
         webhookAsync = userClient.GetWebhookAsync("casbin", name); 
-        getWebhook = await webhookAsync;
+        getWebhook = TestUtils.AssertNotNull(await webhookAsync);
         Assert.Equal("admin", getWebhook.Organization);
 
         // Delete the object
         responseAsync = userClient.DeleteWebhookAsync(webhook);  // 修改为 DeleteWebhookAsync
-        response = await responseAsync;
+        response = TestUtils.AssertNotNull(await responseAsync);
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
         // Validate the deletion
         webhookAsync = userClient.GetWebhookAsync("casbin", name);  // 修改为 GetWebhookAsync
-        getWebhook = await webhookAsync;
-        Assert.Null(getWebhook);
+        var deletedWebhook = await webhookAsync;
+        Assert.Null(deletedWebhook);
 
     }
 }
