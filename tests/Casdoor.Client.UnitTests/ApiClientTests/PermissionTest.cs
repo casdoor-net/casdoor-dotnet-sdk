@@ -87,8 +87,8 @@ public class PermissionTest : IClassFixture<ServicesFixture>
 
         // Validate the update
         permissionAsync = permissionClient.GetPermissionAsync($"{owner}/{name}");
-        getPermission = TestUtils.AssertNotNull(await permissionAsync);
-        Assert.Equal(updatedDescription, getPermission.Description);
+        getPermission = await permissionAsync;
+        Assert.Equal(updatedDescription, getPermission?.Description);
 
         // Delete the object
         responseAsync = permissionClient.DeletePermissionAsync(permission);
