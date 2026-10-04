@@ -16,6 +16,21 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Casdoor.Client.UnitTests.Fixtures;
 
+internal static class TestConfig
+{
+    public static readonly string Endpoint = GetEnv("CASDOOR_TEST_ENDPOINT", "http://localhost:8000");
+    public static readonly string ClientId = GetEnv("CASDOOR_TEST_CLIENT_ID", "casdoor-dotnet-sdk-ci-client");
+    public static readonly string ClientSecret = GetEnv("CASDOOR_TEST_CLIENT_SECRET", "casdoor-dotnet-sdk-ci-secret");
+    public static readonly string OrganizationName = GetEnv("CASDOOR_TEST_ORGANIZATION", "casbin");
+    public static readonly string ApplicationName = GetEnv("CASDOOR_TEST_APPLICATION", "app-example");
+
+    private static string GetEnv(string key, string defaultValue)
+    {
+        var value = Environment.GetEnvironmentVariable(key);
+        return string.IsNullOrEmpty(value) ? defaultValue : value;
+    }
+}
+
 public class ServicesFixture
 {
     public ServicesFixture()
@@ -23,11 +38,11 @@ public class ServicesFixture
         ServiceProvider = new ServiceCollection()
             .AddCasdoorClient(options =>
             {
-                options.Endpoint = "https://demo.casdoor.com";
-                options.OrganizationName = "casbin";
-                options.ApplicationName = "app-example";
-                options.ClientId = "b800a86702dd4d29ec4d";
-                options.ClientSecret = "1219843a8db4695155699be3a67f10796f2ec1d5";
+                options.Endpoint = TestConfig.Endpoint;
+                options.OrganizationName = TestConfig.OrganizationName;
+                options.ApplicationName = TestConfig.ApplicationName;
+                options.ClientId = TestConfig.ClientId;
+                options.ClientSecret = TestConfig.ClientSecret;
                 options.ApplicationType = "webapp";
             }).BuildServiceProvider();
     }
@@ -42,10 +57,10 @@ public class ServicesFixtureWithoutSecret
         ServiceProvider = new ServiceCollection()
             .AddCasdoorClient(options =>
             {
-                options.Endpoint = "https://demo.casdoor.com";
-                options.OrganizationName = "casbin";
-                options.ApplicationName = "app-example";
-                options.ClientId = "b800a86702dd4d29ec4d";
+                options.Endpoint = TestConfig.Endpoint;
+                options.OrganizationName = TestConfig.OrganizationName;
+                options.ApplicationName = TestConfig.ApplicationName;
+                options.ClientId = TestConfig.ClientId;
                 options.ApplicationType = "webapp";
             }).BuildServiceProvider();
     }

@@ -82,9 +82,15 @@ public class TokenTest : IClassFixture<ServicesFixture>
         response = await responseAsync;
         Assert.Equal(CasdoorConstants.DefaultCasdoorSuccessStatus, response.Status);
 
-        // Validate the deletion
-        tokenAsync = tokenClient.GetTokenAsync(owner, name);
-        getToken = await tokenAsync;
-        Assert.Null(getToken);
+        // Validate the deletion, the server may report the deleted token as not existing
+        try
+        {
+            getToken = await tokenClient.GetTokenAsync(owner, name);
+            Assert.Null(getToken);
+        }
+        catch (CasdoorApiException e)
+        {
+            Assert.Contains("does not exist", e.Message);
+        }
     }
 }

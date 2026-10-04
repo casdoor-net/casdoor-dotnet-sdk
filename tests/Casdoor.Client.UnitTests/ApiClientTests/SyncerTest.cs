@@ -43,7 +43,7 @@ public class SyncerTest : IClassFixture<ServicesFixture>
             Password = "123",
             DatabaseType = "mysql",
             Database = "syncer_db",
-            Table = "user-table",
+            Table = "user_table",
             SyncInterval = 1,
         };
 
