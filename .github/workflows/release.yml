@@ -5,6 +5,12 @@ on:
     branches:
       - master
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  packages: write
+
 env:
   SHA: ${{ GITHUB.SHA }}
   REF: ${{ GITHUB.REF }}

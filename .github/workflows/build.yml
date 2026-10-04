@@ -6,6 +6,11 @@ on:
       - master
   pull_request:
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 env:
   SHA: ${{ GITHUB.SHA }}
   REF: ${{ GITHUB.REF }}
