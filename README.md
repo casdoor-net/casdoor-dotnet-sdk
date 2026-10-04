@@ -1,7 +1,13 @@
 # Casdoor .NET SDK
 
-[![Actions Status](https://github.com/casdoor/casdoor-dotnet-sdk/workflows/Build/badge.svg)](https://github.com/casdoor/casdoor-dotnet-sdk/actions)
-[![GitHub](https://img.shields.io/github/license/casdoor/casdoor-dotnet-sdk)](https://github.com/casdoor/casdoor-dotnet-sdk/blob/master/LICENSE)
+[![Build](https://github.com/casdoor-net/casdoor-dotnet-sdk/actions/workflows/build.yml/badge.svg)](https://github.com/casdoor-net/casdoor-dotnet-sdk/actions/workflows/build.yml)
+[![Release](https://github.com/casdoor-net/casdoor-dotnet-sdk/actions/workflows/release.yml/badge.svg)](https://github.com/casdoor-net/casdoor-dotnet-sdk/actions/workflows/release.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/casdoor-net/casdoor-dotnet-sdk)](https://github.com/casdoor-net/casdoor-dotnet-sdk/releases/latest)
+[![NuGet Version](https://img.shields.io/nuget/v/Casdoor.Client?logo=nuget)](https://www.nuget.org/packages/Casdoor.Client)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/Casdoor.Client?logo=nuget)](https://www.nuget.org/packages/Casdoor.Client)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![License](https://img.shields.io/github/license/casdoor-net/casdoor-dotnet-sdk)](https://github.com/casdoor-net/casdoor-dotnet-sdk/blob/master/LICENSE)
+[![Discord](https://img.shields.io/discord/1022748306096537660?logo=discord&label=discord&color=5865F2)](https://discord.gg/5rPsrAzK7S)
 
 The Casdoor's SDK for .NET/ASP.NET Core, which will allow you to easily connect your application to the Casdoor authentication system without having to implement it from scratch.
 
