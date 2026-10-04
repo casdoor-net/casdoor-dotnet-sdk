@@ -29,11 +29,23 @@ public partial class CasdoorClient : ICasdoorClient
         options.Validate();
     }
 
+    /// <summary>
+    ///     Makes this client call the APIs as the user who owns the access token.
+    ///     Prefer WithAccessToken(), which doesn't change this client.
+    /// </summary>
     public CasdoorClient SetBearerToken(string accessToken)
     {
-        _httpClient.SetBearerToken(accessToken);
+        _accessToken = accessToken;
         return this;
     }
+
+    /// <summary>
+    ///     Returns a new client that calls the APIs as the user who owns the access token
+    ///     (Authorization: Bearer) instead of as the application. This client is not changed,
+    ///     so it's safe to create one per request.
+    /// </summary>
+    public ICasdoorClient WithAccessToken(string accessToken) =>
+        new CasdoorClient(_httpClient, _options) { _accessToken = accessToken };
 
     public string GetSigninUrl(string redirectUrl) => _options.GetSigninUrl(redirectUrl);
     public string GetSigninUrl(string codeVerifier, bool noRedirect) => _options.GetSigninUrl(_options.CallbackPath, codeVerifier, noRedirect);

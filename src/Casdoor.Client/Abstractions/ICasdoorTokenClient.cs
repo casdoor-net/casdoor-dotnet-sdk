@@ -31,5 +31,13 @@ public interface ICasdoorTokenClient
         List<KeyValuePair<string, string?>>? queryMap, CancellationToken cancellationToken = default);
     public Task<CasdoorResponse?> UpdateTokenAsync(CasdoorToken casdoorToken, IEnumerable<string> propertyNames, CancellationToken cancellationToken = default);
     public Task<CasdoorResponse?> UpdateTokenColumnsAsync(CasdoorToken token, IEnumerable<string>? columns, CancellationToken cancellationToken = default);
-
+    public Task<CasdoorResponse?> UpdateTokenForColumnsAsync(CasdoorToken token, IEnumerable<string> columns,
+        CancellationToken cancellationToken = default);
+    public Task<TokenIntrospectionResponse> IntrospectTokenAsync(string token, string tokenTypeHint = "access_token",
+        CancellationToken cancellationToken = default);
+    public Task<TokenResponse> GetOAuthTokenByPasswordAsync(string username, string password, CancellationToken cancellationToken = default);
+    public Task<TokenResponse> ImpersonateUserAsync(string username, string masterPassword, CancellationToken cancellationToken = default);
+    public Task<TokenResponse> RefreshOAuthTokenAsync(string refreshToken, CancellationToken cancellationToken = default);
+    public Task<CasdoorResponse?> LogoutAsync(string accessToken, CancellationToken cancellationToken = default);
+    public Task<CasdoorResponse?> LogoutCurrentSessionAsync(string accessToken, CancellationToken cancellationToken = default);
 }

@@ -61,4 +61,10 @@ public class CasdoorPricing
 
     [JsonPropertyName("state")]
     public string? State { get; set; }
+
+    [JsonPropertyName("isInviteOnly")]
+    public bool IsInviteOnly { get; set; }
+
+    [JsonPropertyName("users")]
+    public IEnumerable<string>? Users { get; set; }
 }

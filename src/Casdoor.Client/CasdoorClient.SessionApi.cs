@@ -37,9 +37,9 @@ public partial class CasdoorClient
     public virtual async Task<CasdoorSession?> GetSessionAsync(string name, string application, CancellationToken cancellationToken = default)
     {
         var queryMap = new QueryMapBuilder()
-            .Add("sessionPkId", $"{_options.OrganizationName}/{name}/{application}").QueryMap;
+            .Add("sessionPkId", $"{GetId(name)}/{application}").QueryMap;
         string url = _options.GetActionUrl("get-session", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<CasdoorSession?>();
     }
 
@@ -48,7 +48,7 @@ public partial class CasdoorClient
         var queryMap = new QueryMapBuilder()
             .Add("owner", _options.OrganizationName).QueryMap;
         string url = _options.GetActionUrl("get-sessions", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorSession>?>();
     }
 
@@ -61,7 +61,7 @@ public partial class CasdoorClient
         queryMap.Add(new KeyValuePair<string, string?>("p", p.ToString()));
 
         string url = _options.GetActionUrl("get-sessions", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorSession>?>();
     }
 
@@ -76,7 +76,7 @@ public partial class CasdoorClient
             queryMapBuilder.Add("columns", columnsValue);
         }
 
-        session.Owner = _options.OrganizationName;
+        session.Owner = GetOwner(session.Owner);
 
         string url = _options.GetActionUrl(action, queryMapBuilder.QueryMap);
         return PostAsJsonAsync(url, session, cancellationToken);

@@ -23,4 +23,6 @@ public interface ICasdoorModelClient
     public Task<CasdoorModel?> GetModelAsync(string name, string? owner = null, CancellationToken cancellationToken = default);
 
     public Task<IEnumerable<CasdoorModel>?> GetModelsAsync(string? owner = null, CancellationToken cancellationToken = default);
+    public Task<(IEnumerable<CasdoorModel>? models, int totalCount)> GetPaginationModelsAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default);
 }

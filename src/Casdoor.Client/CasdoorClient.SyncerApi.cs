@@ -38,7 +38,7 @@ public partial class CasdoorClient
             .Add("id", $"{owner}/{name}").QueryMap;
 
         string url = _options.GetActionUrl("get-syncer", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
         return result.DeserializeData<CasdoorSyncer?>();
     }
 
@@ -49,7 +49,7 @@ public partial class CasdoorClient
              .Add("owner", owner).QueryMap;
 
         string url = _options.GetActionUrl("get-syncers", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorSyncer>?>();
     }
 
@@ -64,5 +64,16 @@ public partial class CasdoorClient
              .Add("id", $"{casdoorSyncer.Owner}/{casdoorSyncer.Name}").QueryMap;
         string url = _options.GetActionUrl("update-syncer", queryMap);
         return PostAsJsonAsync(url, casdoorSyncer, cancellationToken);
+    }
+
+    public virtual async Task<(IEnumerable<CasdoorSyncer>? syncers, int totalCount)> GetPaginationSyncersAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default)
+    {
+        queryMap ??= new List<KeyValuePair<string, string?>>();
+        queryMap.Add(new KeyValuePair<string, string?>("owner", _options.OrganizationName));
+        queryMap.Add(new KeyValuePair<string, string?>("p", p.ToString()));
+        queryMap.Add(new KeyValuePair<string, string?>("pageSize", pageSize.ToString()));
+        var result = await GetFromJsonAsync<CasdoorResponse?>(_options.GetActionUrl("get-syncers", queryMap), cancellationToken);
+        return (result.DeserializeData<IEnumerable<CasdoorSyncer>?>(), result.DeserializeData2<int?>() ?? 0);
     }
 }

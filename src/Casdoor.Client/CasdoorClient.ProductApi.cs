@@ -34,9 +34,9 @@ public partial class CasdoorClient
     public virtual async Task<CasdoorProduct?> GetProductAsync(string name, CancellationToken cancellationToken = default)
     {
         var queryMap = new QueryMapBuilder()
-            .Add("id", $"{_options.OrganizationName}/{name}").QueryMap;
+            .Add("id", GetId(name)).QueryMap;
         string url = _options.GetActionUrl("get-product", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<CasdoorProduct?>();
     }
 
@@ -45,7 +45,7 @@ public partial class CasdoorClient
         var queryMap = new QueryMapBuilder()
             .Add("owner", _options.OrganizationName).QueryMap;
         string url = _options.GetActionUrl("get-products", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorProduct>?>();
     }
 
@@ -58,7 +58,7 @@ public partial class CasdoorClient
         queryMap.Add(new KeyValuePair<string, string?>("p", p.ToString()));
 
         string url = _options.GetActionUrl("get-products", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorProduct>?>();
     }
 
@@ -73,7 +73,7 @@ public partial class CasdoorClient
             queryMapBuilder.Add("columns", columnsValue);
         }
 
-        product.Owner = _options.OrganizationName;
+        product.Owner = GetOwner(product.Owner);
 
         string url = _options.GetActionUrl(action, queryMapBuilder.QueryMap);
         return PostAsJsonAsync(url, product, cancellationToken);
@@ -82,10 +82,10 @@ public partial class CasdoorClient
     public virtual async Task<CasdoorResponse?> BuyProductAsync(string name, string providerName, CancellationToken cancellationToken = default)
     {
         var queryMap = new QueryMapBuilder()
-            .Add("id", $"{_options.OrganizationName}/{name}")
+            .Add("id", GetId(name))
             .Add("providerName", providerName).QueryMap;
         string url = _options.GetActionUrl("buy-product", queryMap);
-        return await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        return await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
     }
 }
 

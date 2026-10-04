@@ -61,4 +61,22 @@ public class CasdoorCert
 
     [JsonPropertyName("authorityRootPublicKey")]
     public string? AuthorityRootPublicKey { get; set; }
+
+    [JsonPropertyName("expireTime")]
+    public string? ExpireTime { get; set; }
+
+    [JsonPropertyName("domainExpireTime")]
+    public string? DomainExpireTime { get; set; }
+
+    [JsonPropertyName("provider")]
+    public string? Provider { get; set; }
+
+    [JsonPropertyName("account")]
+    public string? Account { get; set; }
+
+    [JsonPropertyName("accessKey")]
+    public string? AccessKey { get; set; }
+
+    [JsonPropertyName("accessSecret")]
+    public string? AccessSecret { get; set; }
 }

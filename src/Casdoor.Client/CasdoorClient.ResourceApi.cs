@@ -30,7 +30,9 @@ public partial class CasdoorClient
             .Add("application", _options.ApplicationName)
             .Add("tag", tag)
             .Add("parent", parent)
-            .Add("fullFilePath", fullFilePath).QueryMap;
+            .Add("fullFilePath", fullFilePath)
+            .Add("createdTime", createdTime)
+            .Add("description", description).QueryMap;
         string url = _options.GetActionUrl("upload-resource", queryMap);
         return PostFileAsync(url, new StreamContent(fileStream), cancellationToken: cancellationToken);
     }
@@ -52,9 +54,9 @@ public partial class CasdoorClient
     public virtual async Task<CasdoorUserResource?> GetResourceAsync(string name, CancellationToken cancellationToken = default)
     {
         var queryMap = new QueryMapBuilder()
-            .Add("id", $"{_options.OrganizationName}/{name}").QueryMap;
+            .Add("id", GetId(name)).QueryMap;
         string url = _options.GetActionUrl("get-resource", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<CasdoorUserResource?>();
     }
 
@@ -70,7 +72,7 @@ public partial class CasdoorClient
             .Add("sortOrder", sortOrder)
             .QueryMap;
         string url = _options.GetActionUrl("get-resources", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorUserResource>?>();
     }
 
@@ -88,7 +90,28 @@ public partial class CasdoorClient
             .Add("sortOrder", sortOrder)
             .QueryMap;
         string url = _options.GetActionUrl("get-resources", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorUserResource>?>();
+    }
+
+    public virtual Task<CasdoorUserResource?> GetResourceExAsync(string owner, string name, CancellationToken cancellationToken = default) =>
+        GetResourceAsync($"{owner}/{name}", cancellationToken);
+
+    public virtual Task<CasdoorResponse?> UpdateResourceAsync(CasdoorUserResource resource, CancellationToken cancellationToken = default)
+    {
+        resource.Owner = GetOwner(resource.Owner);
+        var queryMap = new QueryMapBuilder().Add("id", $"{resource.Owner}/{resource.Name}").QueryMap;
+        return PostAsJsonAsync(_options.GetActionUrl("update-resource", queryMap), resource, cancellationToken);
+    }
+
+    /// <summary>
+    ///     Deletes the resource, the "Direct" tag also deletes the file from the storage provider.
+    /// </summary>
+    public virtual Task<CasdoorResponse?> DeleteResourceWithTagAsync(CasdoorUserResource resource, string tag,
+        CancellationToken cancellationToken = default)
+    {
+        resource.Owner = GetOwner(resource.Owner);
+        var queryMap = new QueryMapBuilder().Add("tag", tag).QueryMap;
+        return PostAsJsonAsync(_options.GetActionUrl("delete-resource", queryMap), resource, cancellationToken);
     }
 }

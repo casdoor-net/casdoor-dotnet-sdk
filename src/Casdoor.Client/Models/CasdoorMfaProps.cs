@@ -24,4 +24,7 @@ public class CasdoorMfaProps
 
     [JsonPropertyName("recoveryCodes")]
     public string[]? RecoveryCodes { get; set; }
+
+    [JsonPropertyName("mfaRememberInHours")]
+    public int MfaRememberInHours { get; set; }
 }

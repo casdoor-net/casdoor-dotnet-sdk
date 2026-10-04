@@ -39,7 +39,7 @@ public partial class CasdoorClient
         var queryMap = new QueryMapBuilder()
             .Add("id", $"{owner}/{name}").QueryMap;
         string url = _options.GetActionUrl("get-adapter", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<CasdoorAdapter?>();
     }
 
@@ -48,7 +48,7 @@ public partial class CasdoorClient
         var queryMap = new QueryMapBuilder()
             .Add("owner", owner).QueryMap;
         string url = _options.GetActionUrl("get-adapters", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorAdapter>?>();
     }
 
@@ -61,7 +61,7 @@ public partial class CasdoorClient
         queryMap.Add(new KeyValuePair<string, string?>("p", p.ToString()));
 
         string url = _options.GetActionUrl("get-adapters", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorAdapter>?>();
     }
 

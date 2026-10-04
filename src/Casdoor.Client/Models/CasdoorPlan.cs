@@ -34,4 +34,19 @@ public class CasdoorPlan
     [JsonPropertyName("isEnabled")] public bool IsEnabled { get; set; }
     [JsonPropertyName("role")] public string? Role { get; set; }
     [JsonPropertyName("options")] public List<string>? Options { get; set; }
+
+    [JsonPropertyName("price")]
+    public double Price { get; set; }
+
+    [JsonPropertyName("period")]
+    public string? Period { get; set; }
+
+    [JsonPropertyName("product")]
+    public string? Product { get; set; }
+
+    [JsonPropertyName("paymentProviders")]
+    public IEnumerable<string>? PaymentProviders { get; set; }
+
+    [JsonPropertyName("isExclusive")]
+    public bool IsExclusive { get; set; }
 }

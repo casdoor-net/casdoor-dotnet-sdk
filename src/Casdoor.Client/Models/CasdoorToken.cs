@@ -67,4 +67,28 @@ public class CasdoorToken
 
     [JsonPropertyName("user")]
     public string? User { get; set; }
+
+    [JsonPropertyName("idToken")]
+    public string? IdToken { get; set; }
+
+    [JsonPropertyName("accessTokenHash")]
+    public string? AccessTokenHash { get; set; }
+
+    [JsonPropertyName("refreshTokenHash")]
+    public string? RefreshTokenHash { get; set; }
+
+    [JsonPropertyName("idTokenHash")]
+    public string? IdTokenHash { get; set; }
+
+    [JsonPropertyName("grantType")]
+    public string? GrantType { get; set; }
+
+    [JsonPropertyName("resource")]
+    public string? Resource { get; set; }
+
+    [JsonPropertyName("dPoPJkt")]
+    public string? DPoPJkt { get; set; }
+
+    [JsonPropertyName("sessionId")]
+    public string? SessionId { get; set; }
 }

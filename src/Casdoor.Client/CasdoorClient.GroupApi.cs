@@ -36,9 +36,9 @@ public partial class CasdoorClient
 
     public virtual async Task<CasdoorGroup?> GetGroupAsync(string name, string? owner = null, CancellationToken cancellationToken = default)
     {
-        var queryMap = new QueryMapBuilder().Add("id", $"{owner ?? _options.OrganizationName}/{name}").QueryMap;
+        var queryMap = new QueryMapBuilder().Add("id", GetId(name, owner)).QueryMap;
         string url = _options.GetActionUrl("get-group", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<CasdoorGroup?>();
     }
 
@@ -46,7 +46,18 @@ public partial class CasdoorClient
     {
         var queryMap = new QueryMapBuilder().Add("owner", owner ?? _options.OrganizationName).QueryMap;
         string url = _options.GetActionUrl("get-groups", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorGroup>?>();
+    }
+
+    public virtual async Task<(IEnumerable<CasdoorGroup>? groups, int totalCount)> GetPaginationGroupsAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default)
+    {
+        queryMap ??= new List<KeyValuePair<string, string?>>();
+        queryMap.Add(new KeyValuePair<string, string?>("owner", _options.OrganizationName));
+        queryMap.Add(new KeyValuePair<string, string?>("p", p.ToString()));
+        queryMap.Add(new KeyValuePair<string, string?>("pageSize", pageSize.ToString()));
+        var result = await GetFromJsonAsync<CasdoorResponse?>(_options.GetActionUrl("get-groups", queryMap), cancellationToken);
+        return (result.DeserializeData<IEnumerable<CasdoorGroup>?>(), result.DeserializeData2<int?>() ?? 0);
     }
 }

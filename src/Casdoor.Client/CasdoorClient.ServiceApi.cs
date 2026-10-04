@@ -51,4 +51,40 @@ public partial class CasdoorClient
         };
         return PostAsJsonAsync(url, form, cancellationToken);
     }
+
+    /// <summary>
+    ///     Sends the email by the given email provider instead of the application's default one.
+    /// </summary>
+    public virtual Task<CasdoorResponse?> SendEmailByProviderAsync(string title, string content, string sender, string provider,
+        IEnumerable<string> receivers, CancellationToken cancellationToken = default)
+    {
+        CasdoorEmailForm form = new()
+        {
+            Title = title,
+            Content = content,
+            Receivers = receivers as string[] ?? receivers.ToArray(),
+            Sender = sender
+        };
+        var queryMap = new QueryMapBuilder().Add("provider", provider).QueryMap;
+        return PostAsJsonAsync(_options.GetActionUrl("send-email", queryMap), form, cancellationToken);
+    }
+
+    /// <summary>
+    ///     Sends the SMS by the given SMS provider instead of the application's default one.
+    /// </summary>
+    public virtual Task<CasdoorResponse?> SendSmsByProviderAsync(string content, string provider, IEnumerable<string> receivers,
+        CancellationToken cancellationToken = default)
+    {
+        CasdoorSmsForm form = new() { Content = content, Receivers = receivers as string[] ?? receivers.ToArray() };
+        var queryMap = new QueryMapBuilder().Add("provider", provider).QueryMap;
+        return PostAsJsonAsync(_options.GetActionUrl("send-sms", queryMap), form, cancellationToken);
+    }
+
+    /// <summary>
+    ///     Sends the content to the recipient by the notification provider of the organization.
+    /// </summary>
+    public virtual Task<CasdoorResponse?> SendNotificationAsync(string content, string recipient,
+        CancellationToken cancellationToken = default) =>
+        PostAsJsonAsync(_options.GetActionUrl("send-notification"),
+            new Dictionary<string, string> { ["content"] = content, ["recipient"] = recipient }, cancellationToken);
 }

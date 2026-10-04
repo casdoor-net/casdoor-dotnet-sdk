@@ -48,6 +48,12 @@ public class CasdoorRole
 
     [JsonPropertyName("isEnabled")]
     public bool IsEnabled { get; set; }
+
+    [JsonPropertyName("groups")]
+    public IEnumerable<string>? Groups { get; set; }
+
+    [JsonPropertyName("sourceGroups")]
+    public IEnumerable<string>? SourceGroups { get; set; }
 }
 
 

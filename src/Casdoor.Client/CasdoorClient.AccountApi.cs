@@ -53,7 +53,7 @@ public partial class CasdoorClient
     {
         var queryMap = new QueryMapBuilder().Add("id", $"{owner}/{id}").QueryMap;
         var url = _options.GetActionUrl("get-ldap", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<CasdoorLdap?>();
     }
 
@@ -62,7 +62,7 @@ public partial class CasdoorClient
         var queryMap = new QueryMapBuilder().Add("owner", owner).QueryMap;
         var url = _options.GetActionUrl("get-ldaps", queryMap);
 
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
 
         return result.DeserializeData<IEnumerable<CasdoorLdap>?>();
     }
@@ -84,7 +84,7 @@ public partial class CasdoorClient
     {
         var queryMap = new QueryMapBuilder().Add("id", $"{owner}/{id}").QueryMap;
         var url = _options.GetActionUrl("get-ldap-users", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
         return result.DeserializeData<CasdoorLdapUsers?>();
     }
 
@@ -99,7 +99,7 @@ public partial class CasdoorClient
     public virtual async Task<CasdoorAccount?> GetAccountAsync(CancellationToken cancellationToken = default)
     {
         var url = _options.GetActionUrl("get-account");
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
 
         var casdoorUser = result.DeserializeData<CasdoorUser?>();
         var casdoorOrganization = result.DeserializeData2<CasdoorOrganization?>();
@@ -117,7 +117,7 @@ public partial class CasdoorClient
     public virtual async Task<CasdoorLaravelResponse?> User(CancellationToken cancellationToken = default)
     {
         var url = _options.GetActionUrl("user");
-        return await _httpClient.GetFromJsonAsync<CasdoorLaravelResponse?>(url, cancellationToken: cancellationToken);
+        return await GetFromJsonAsync<CasdoorLaravelResponse?>(url, cancellationToken: cancellationToken);
     }
 
     public virtual async Task<CasdoorUserInfo?> UserInfo(string accessToken = "" ,CancellationToken cancellationToken = default)
@@ -130,6 +130,16 @@ public partial class CasdoorClient
             url = _options.GetActionUrl("userinfo", queryMap);
         }
         
-        return await _httpClient.GetFromJsonAsync<CasdoorUserInfo?>(url, cancellationToken: cancellationToken);
+        return await GetFromJsonAsync<CasdoorUserInfo?>(url, cancellationToken: cancellationToken);
+    }
+
+    /// <summary>
+    ///     Fetches all the users from the LDAP server and syncs them into Casdoor.
+    /// </summary>
+    public virtual async Task<CasdoorResponse?> SyncLdapUsersFromServerAsync(string owner, string id,
+        CancellationToken cancellationToken = default)
+    {
+        var ldapUsers = await GetLdapUsersAsync(owner, id, cancellationToken);
+        return await SyncLdapUsersAsync(owner, id, ldapUsers?.Users ?? Enumerable.Empty<CasdoorLdapUser>(), cancellationToken);
     }
 }

@@ -70,4 +70,19 @@ public class CasdoorProduct
 
     [JsonPropertyName("providerObjs")]
     public IEnumerable<CasdoorProvider>? ProviderObjs { get; set; }
+
+    [JsonPropertyName("isRecharge")]
+    public bool IsRecharge { get; set; }
+
+    [JsonPropertyName("rechargeOptions")]
+    public IEnumerable<double>? RechargeOptions { get; set; }
+
+    [JsonPropertyName("disableCustomRecharge")]
+    public bool DisableCustomRecharge { get; set; }
+
+    [JsonPropertyName("successUrl")]
+    public string? SuccessUrl { get; set; }
+
+    [JsonPropertyName("properties")]
+    public Dictionary<string, string>? Properties { get; set; }
 }

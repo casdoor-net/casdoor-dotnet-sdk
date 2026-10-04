@@ -51,6 +51,18 @@ public class CasdoorGroup
     public List<CasdoorGroup>? Children { get; set; }
     [JsonPropertyName("isEnabled")]
     public bool? IsEnabled { get; set; }
+
+    [JsonPropertyName("parentName")]
+    public string? ParentName { get; set; }
+
+    [JsonPropertyName("haveChildren")]
+    public bool HaveChildren { get; set; }
+
+    [JsonPropertyName("gidNumber")]
+    public int GidNumber { get; set; }
+
+    [JsonPropertyName("properties")]
+    public Dictionary<string, string>? Properties { get; set; }
 }
 
 

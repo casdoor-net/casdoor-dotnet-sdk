@@ -23,4 +23,6 @@ public interface ICasdoorGroupClient
     public Task<CasdoorGroup?> GetGroupAsync(string name, string? owner = null, CancellationToken cancellationToken = default);
 
     public Task<IEnumerable<CasdoorGroup>?> GetGroupsAsync(string? owner = null, CancellationToken cancellationToken = default);
+    public Task<(IEnumerable<CasdoorGroup>? groups, int totalCount)> GetPaginationGroupsAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default);
 }

@@ -28,7 +28,7 @@ public class CertTest : IClassFixture<ServicesFixture>
         var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 
 
-        const string ownerName = "admin";
+        string ownerName = TestConfig.OrganizationName;
         string name = TestUtils.GetRandomName("Cert");
 
         var cert = new CasdoorCert()

@@ -21,4 +21,6 @@ public interface ICasdoorWebhookClient
     public Task<CasdoorWebhook?> GetWebhookAsync(string owner, string name, CancellationToken cancellationToken = default);
     public Task<IEnumerable<CasdoorWebhook>?> GetWebhooksAsync(string owner, CancellationToken cancellationToken = default);
     public Task<CasdoorResponse?> UpdateWebhookAsync(CasdoorWebhook webhook, CancellationToken cancellationToken = default);
+    public Task<(IEnumerable<CasdoorWebhook>? webhooks, int totalCount)> GetPaginationWebhooksAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default);
 }

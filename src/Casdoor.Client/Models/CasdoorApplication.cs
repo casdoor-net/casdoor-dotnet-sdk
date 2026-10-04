@@ -38,6 +38,21 @@ public class CasdoorProviderItem
 
     [JsonPropertyName("provider")]
     public CasdoorProvider? Provider { get; set; }
+
+    [JsonPropertyName("owner")]
+    public string? Owner { get; set; }
+
+    [JsonPropertyName("bindingRule")]
+    public IEnumerable<string>? BindingRule { get; set; }
+
+    [JsonPropertyName("countryCodes")]
+    public IEnumerable<string>? CountryCodes { get; set; }
+
+    [JsonPropertyName("signupGroup")]
+    public string? SignupGroup { get; set; }
+
+    [JsonPropertyName("rule")]
+    public string? Rule { get; set; }
 }
 
 public class CasdoorSignupItem
@@ -56,6 +71,24 @@ public class CasdoorSignupItem
 
     [JsonPropertyName("rule")]
     public string? Rule { get; set; }
+
+    [JsonPropertyName("type")]
+    public string? Type { get; set; }
+
+    [JsonPropertyName("customCss")]
+    public string? CustomCss { get; set; }
+
+    [JsonPropertyName("label")]
+    public string? Label { get; set; }
+
+    [JsonPropertyName("placeholder")]
+    public string? Placeholder { get; set; }
+
+    [JsonPropertyName("options")]
+    public IEnumerable<string>? Options { get; set; }
+
+    [JsonPropertyName("regex")]
+    public string? Regex { get; set; }
 }
 
 public class CasdoorApplication
@@ -185,4 +218,163 @@ public class CasdoorApplication
 
     [JsonPropertyName("formBackgroundUrl")]
     public string? FormBackgroundUrl { get; set; }
+
+    [JsonPropertyName("category")]
+    public string? Category { get; set; }
+
+    [JsonPropertyName("type")]
+    public string? Type { get; set; }
+
+    [JsonPropertyName("scopes")]
+    public IEnumerable<object>? Scopes { get; set; }
+
+    [JsonPropertyName("logoDark")]
+    public string? LogoDark { get; set; }
+
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+
+    [JsonPropertyName("favicon")]
+    public string? Favicon { get; set; }
+
+    [JsonPropertyName("order")]
+    public int Order { get; set; }
+
+    [JsonPropertyName("defaultGroup")]
+    public string? DefaultGroup { get; set; }
+
+    [JsonPropertyName("defaultTag")]
+    public string? DefaultTag { get; set; }
+
+    [JsonPropertyName("headerHtml")]
+    public string? HeaderHtml { get; set; }
+
+    [JsonPropertyName("pageHtml")]
+    public string? PageHtml { get; set; }
+
+    [JsonPropertyName("enableGuestSignin")]
+    public bool EnableGuestSignin { get; set; }
+
+    [JsonPropertyName("disableSignin")]
+    public bool DisableSignin { get; set; }
+
+    [JsonPropertyName("enableExclusiveSignin")]
+    public bool EnableExclusiveSignin { get; set; }
+
+    [JsonPropertyName("maxSessions")]
+    public int MaxSessions { get; set; }
+
+    [JsonPropertyName("enableSamlC14n10")]
+    public bool EnableSamlC14n10 { get; set; }
+
+    [JsonPropertyName("enableSamlPostBinding")]
+    public bool EnableSamlPostBinding { get; set; }
+
+    [JsonPropertyName("disableSamlAttributes")]
+    public bool DisableSamlAttributes { get; set; }
+
+    [JsonPropertyName("enableSamlAssertionSignature")]
+    public bool EnableSamlAssertionSignature { get; set; }
+
+    [JsonPropertyName("useEmailAsSamlNameId")]
+    public bool UseEmailAsSamlNameId { get; set; }
+
+    [JsonPropertyName("enableWebAuthn")]
+    public bool EnableWebAuthn { get; set; }
+
+    [JsonPropertyName("samlSingleLogoutUrl")]
+    public string? SamlSingleLogoutUrl { get; set; }
+
+    [JsonPropertyName("signinMethods")]
+    public IEnumerable<object>? SigninMethods { get; set; }
+
+    [JsonPropertyName("signinItems")]
+    public IEnumerable<object>? SigninItems { get; set; }
+
+    [JsonPropertyName("certPublicKey")]
+    public string? CertPublicKey { get; set; }
+
+    [JsonPropertyName("samlAttributes")]
+    public IEnumerable<object>? SamlAttributes { get; set; }
+
+    [JsonPropertyName("samlHashAlgorithm")]
+    public string? SamlHashAlgorithm { get; set; }
+
+    [JsonPropertyName("samlC14nPrefix")]
+    public string? SamlC14nPrefix { get; set; }
+
+    [JsonPropertyName("isShared")]
+    public bool IsShared { get; set; }
+
+    [JsonPropertyName("ipRestriction")]
+    public string? IpRestriction { get; set; }
+
+    [JsonPropertyName("clientCert")]
+    public string? ClientCert { get; set; }
+
+    [JsonPropertyName("backchannelLogoutUri")]
+    public string? BackchannelLogoutUri { get; set; }
+
+    [JsonPropertyName("forcedRedirectOrigin")]
+    public string? ForcedRedirectOrigin { get; set; }
+
+    [JsonPropertyName("tokenSigningMethod")]
+    public string? TokenSigningMethod { get; set; }
+
+    [JsonPropertyName("tokenFields")]
+    public IEnumerable<string>? TokenFields { get; set; }
+
+    [JsonPropertyName("tokenAttributes")]
+    public IEnumerable<object>? TokenAttributes { get; set; }
+
+    [JsonPropertyName("tokenGroupFormat")]
+    public string? TokenGroupFormat { get; set; }
+
+    [JsonPropertyName("cookieExpireInHours")]
+    public long CookieExpireInHours { get; set; }
+
+    [JsonPropertyName("ipWhitelist")]
+    public string? IpWhitelist { get; set; }
+
+    [JsonPropertyName("footerHtml")]
+    public string? FooterHtml { get; set; }
+
+    [JsonPropertyName("formSideHtml")]
+    public string? FormSideHtml { get; set; }
+
+    [JsonPropertyName("formBackgroundUrlMobile")]
+    public string? FormBackgroundUrlMobile { get; set; }
+
+    [JsonPropertyName("failedSigninLimit")]
+    public int FailedSigninLimit { get; set; }
+
+    [JsonPropertyName("failedSigninFrozenTime")]
+    public int FailedSigninFrozenTime { get; set; }
+
+    [JsonPropertyName("codeResendTimeout")]
+    public int CodeResendTimeout { get; set; }
+
+    [JsonPropertyName("customScopes")]
+    public IEnumerable<object>? CustomScopes { get; set; }
+
+    [JsonPropertyName("domain")]
+    public string? Domain { get; set; }
+
+    [JsonPropertyName("otherDomains")]
+    public IEnumerable<string>? OtherDomains { get; set; }
+
+    [JsonPropertyName("upstreamHost")]
+    public string? UpstreamHost { get; set; }
+
+    [JsonPropertyName("sslMode")]
+    public string? SslMode { get; set; }
+
+    [JsonPropertyName("sslCert")]
+    public string? SslCert { get; set; }
+
+    [JsonPropertyName("CertObj")]
+    public CasdoorCert? CertObj { get; set; }
+
+    [JsonPropertyName("registrationAccessToken")]
+    public string? RegistrationAccessToken { get; set; }
 }

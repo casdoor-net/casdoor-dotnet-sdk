@@ -22,4 +22,6 @@ public interface ICasdoorProviderClient
     public Task<CasdoorProvider?> GetProviderAsync(string name, string owner = CasdoorConstants.DefaultCasdoorOwner, CancellationToken cancellationToken = default);
     public Task<IEnumerable<CasdoorProvider>?> GetProvidersAsync(string owner = CasdoorConstants.DefaultCasdoorOwner, CancellationToken cancellationToken = default);
     public Task<IEnumerable<CasdoorProvider>?> GetGlobalProvidersAsync(CancellationToken cancellationToken = default);
+    public Task<(IEnumerable<CasdoorProvider>? providers, int totalCount)> GetPaginationProvidersAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default);
 }

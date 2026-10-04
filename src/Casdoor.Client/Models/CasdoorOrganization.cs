@@ -39,6 +39,12 @@ public class CasdoorAccountItem
 
     [JsonPropertyName("modifyRule")]
     public string? ModifyRule { get; set; }
+
+    [JsonPropertyName("regex")]
+    public string? Regex { get; set; }
+
+    [JsonPropertyName("tab")]
+    public string? Tab { get; set; }
 }
 
 public class CasdoorOrganization
@@ -105,4 +111,118 @@ public class CasdoorOrganization
 
     [JsonPropertyName("accountItems")]
     public CasdoorAccountItem[]? AccountItems { get; set; }
+
+    [JsonPropertyName("logo")]
+    public string? Logo { get; set; }
+
+    [JsonPropertyName("logoDark")]
+    public string? LogoDark { get; set; }
+
+    [JsonPropertyName("hasPrivilegeConsent")]
+    public bool HasPrivilegeConsent { get; set; }
+
+    [JsonPropertyName("passwordObfuscatorType")]
+    public string? PasswordObfuscatorType { get; set; }
+
+    [JsonPropertyName("passwordObfuscatorKey")]
+    public string? PasswordObfuscatorKey { get; set; }
+
+    [JsonPropertyName("passwordExpireDays")]
+    public int PasswordExpireDays { get; set; }
+
+    [JsonPropertyName("passwordHistoryCount")]
+    public int PasswordHistoryCount { get; set; }
+
+    [JsonPropertyName("tokenRetentionDays")]
+    public int TokenRetentionDays { get; set; }
+
+    [JsonPropertyName("recordRetentionDays")]
+    public int RecordRetentionDays { get; set; }
+
+    [JsonPropertyName("usePermanentAvatar")]
+    public bool UsePermanentAvatar { get; set; }
+
+    [JsonPropertyName("defaultTokenFormat")]
+    public string? DefaultTokenFormat { get; set; }
+
+    [JsonPropertyName("defaultTokenFields")]
+    public IEnumerable<string>? DefaultTokenFields { get; set; }
+
+    [JsonPropertyName("userTypes")]
+    public IEnumerable<string>? UserTypes { get; set; }
+
+    [JsonPropertyName("defaultPassword")]
+    public string? DefaultPassword { get; set; }
+
+    [JsonPropertyName("masterVerificationCode")]
+    public string? MasterVerificationCode { get; set; }
+
+    [JsonPropertyName("ipWhitelist")]
+    public string? IpWhitelist { get; set; }
+
+    [JsonPropertyName("useEmailAsUsername")]
+    public bool UseEmailAsUsername { get; set; }
+
+    [JsonPropertyName("enableTour")]
+    public bool EnableTour { get; set; }
+
+    [JsonPropertyName("disableSignin")]
+    public bool DisableSignin { get; set; }
+
+    [JsonPropertyName("enableExclusiveSignin")]
+    public bool EnableExclusiveSignin { get; set; }
+
+    [JsonPropertyName("maxSessions")]
+    public int MaxSessions { get; set; }
+
+    [JsonPropertyName("disableConsole")]
+    public bool DisableConsole { get; set; }
+
+    [JsonPropertyName("ipRestriction")]
+    public string? IpRestriction { get; set; }
+
+    [JsonPropertyName("navItems")]
+    public IEnumerable<string>? NavItems { get; set; }
+
+    [JsonPropertyName("userNavItems")]
+    public IEnumerable<string>? UserNavItems { get; set; }
+
+    [JsonPropertyName("widgetItems")]
+    public IEnumerable<string>? WidgetItems { get; set; }
+
+    [JsonPropertyName("mfaRememberInHours")]
+    public int MfaRememberInHours { get; set; }
+
+    [JsonPropertyName("accountMenu")]
+    public string? AccountMenu { get; set; }
+
+    [JsonPropertyName("dcrPolicy")]
+    public string? DcrPolicy { get; set; }
+
+    [JsonPropertyName("ldapAttributes")]
+    public IEnumerable<string>? LdapAttributes { get; set; }
+
+    [JsonPropertyName("kerberosRealm")]
+    public string? KerberosRealm { get; set; }
+
+    [JsonPropertyName("kerberosKdcHost")]
+    public string? KerberosKdcHost { get; set; }
+
+    [JsonPropertyName("kerberosKeytab")]
+    public string? KerberosKeytab { get; set; }
+
+    [JsonPropertyName("kerberosServiceName")]
+    public string? KerberosServiceName { get; set; }
+
+    [JsonPropertyName("orgBalance")]
+    public double OrgBalance { get; set; }
+
+    [JsonPropertyName("userBalance")]
+    public double UserBalance { get; set; }
+
+    [JsonPropertyName("balanceCredit")]
+    public double BalanceCredit { get; set; }
+
+    [JsonPropertyName("balanceCurrency")]
+    public string? BalanceCurrency { get; set; }
 }

@@ -60,4 +60,16 @@ public class CasdoorRecord
 
     [JsonPropertyName("isTriggered")]
     public bool IsTriggered { get; set; }
+
+    [JsonPropertyName("language")]
+    public string? Language { get; set; }
+
+    [JsonPropertyName("response")]
+    public string? Response { get; set; }
+
+    [JsonPropertyName("statusCode")]
+    public int StatusCode { get; set; }
+
+    [JsonPropertyName("detail")]
+    public string? Detail { get; set; }
 }

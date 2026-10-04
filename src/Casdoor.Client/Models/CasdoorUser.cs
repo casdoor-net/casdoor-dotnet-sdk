@@ -450,4 +450,151 @@ public class CasdoorUser
 
     [JsonPropertyName("managedAccounts")]
     public IEnumerable<CasdoorManagedAccount>? ManagedAccounts { get; set; }
+
+    [JsonPropertyName("deletedTime")]
+    public string? DeletedTime { get; set; }
+
+    [JsonPropertyName("externalId")]
+    public string? ExternalId { get; set; }
+
+    [JsonPropertyName("addresses")]
+    public IEnumerable<object>? Addresses { get; set; }
+
+    [JsonPropertyName("realName")]
+    public string? RealName { get; set; }
+
+    [JsonPropertyName("isVerified")]
+    public bool IsVerified { get; set; }
+
+    [JsonPropertyName("balance")]
+    public double Balance { get; set; }
+
+    [JsonPropertyName("balanceCredit")]
+    public double BalanceCredit { get; set; }
+
+    [JsonPropertyName("currency")]
+    public string? Currency { get; set; }
+
+    [JsonPropertyName("balanceCurrency")]
+    public string? BalanceCurrency { get; set; }
+
+    [JsonPropertyName("registerType")]
+    public string? RegisterType { get; set; }
+
+    [JsonPropertyName("registerSource")]
+    public string? RegisterSource { get; set; }
+
+    [JsonPropertyName("accessToken")]
+    public string? AccessToken { get; set; }
+
+    [JsonPropertyName("originalToken")]
+    public string? OriginalToken { get; set; }
+
+    [JsonPropertyName("originalRefreshToken")]
+    public string? OriginalRefreshToken { get; set; }
+
+    [JsonPropertyName("azureadb2c")]
+    public string? Azureadb2c { get; set; }
+
+    [JsonPropertyName("kwai")]
+    public string? Kwai { get; set; }
+
+    [JsonPropertyName("telegram")]
+    public string? Telegram { get; set; }
+
+    [JsonPropertyName("metamask")]
+    public string? Metamask { get; set; }
+
+    [JsonPropertyName("web3onboard")]
+    public string? Web3onboard { get; set; }
+
+    [JsonPropertyName("oidc")]
+    public string? Oidc { get; set; }
+
+    [JsonPropertyName("custom2")]
+    public string? Custom2 { get; set; }
+
+    [JsonPropertyName("custom3")]
+    public string? Custom3 { get; set; }
+
+    [JsonPropertyName("custom4")]
+    public string? Custom4 { get; set; }
+
+    [JsonPropertyName("custom5")]
+    public string? Custom5 { get; set; }
+
+    [JsonPropertyName("custom6")]
+    public string? Custom6 { get; set; }
+
+    [JsonPropertyName("custom7")]
+    public string? Custom7 { get; set; }
+
+    [JsonPropertyName("custom8")]
+    public string? Custom8 { get; set; }
+
+    [JsonPropertyName("custom9")]
+    public string? Custom9 { get; set; }
+
+    [JsonPropertyName("custom10")]
+    public string? Custom10 { get; set; }
+
+    [JsonPropertyName("webauthnCredentials")]
+    public object? WebauthnCredentials { get; set; }
+
+    [JsonPropertyName("mfaRadiusEnabled")]
+    public bool MfaRadiusEnabled { get; set; }
+
+    [JsonPropertyName("mfaRadiusUsername")]
+    public string? MfaRadiusUsername { get; set; }
+
+    [JsonPropertyName("mfaRadiusProvider")]
+    public string? MfaRadiusProvider { get; set; }
+
+    [JsonPropertyName("mfaPushEnabled")]
+    public bool MfaPushEnabled { get; set; }
+
+    [JsonPropertyName("mfaPushReceiver")]
+    public string? MfaPushReceiver { get; set; }
+
+    [JsonPropertyName("mfaPushProvider")]
+    public string? MfaPushProvider { get; set; }
+
+    [JsonPropertyName("invitation")]
+    public string? Invitation { get; set; }
+
+    [JsonPropertyName("invitationCode")]
+    public string? InvitationCode { get; set; }
+
+    [JsonPropertyName("faceIds")]
+    public IEnumerable<object>? FaceIds { get; set; }
+
+    [JsonPropertyName("cart")]
+    public IEnumerable<CasdoorProductInfo>? Cart { get; set; }
+
+    [JsonPropertyName("uidNumber")]
+    public int UidNumber { get; set; }
+
+    [JsonPropertyName("thirdPartyLinks")]
+    public IEnumerable<object>? ThirdPartyLinks { get; set; }
+
+    [JsonPropertyName("lastChangePasswordTime")]
+    public string? LastChangePasswordTime { get; set; }
+
+    [JsonPropertyName("mfaAccounts")]
+    public IEnumerable<object>? MfaAccounts { get; set; }
+
+    [JsonPropertyName("mfaItems")]
+    public IEnumerable<CasdoorMfaItem>? MfaItems { get; set; }
+
+    [JsonPropertyName("mfaRememberDeadline")]
+    public string? MfaRememberDeadline { get; set; }
+
+    [JsonPropertyName("needUpdatePassword")]
+    public bool NeedUpdatePassword { get; set; }
+
+    [JsonPropertyName("ipWhitelist")]
+    public string? IpWhitelist { get; set; }
+
+    [JsonPropertyName("applicationScopes")]
+    public IEnumerable<object>? ApplicationScopes { get; set; }
 }

@@ -22,4 +22,12 @@ public interface ICasdoorServiceClient
         IEnumerable<string> receivers, CancellationToken cancellationToken = default);
 
     public Task<CasdoorResponse?> SendNotification(string content, CancellationToken cancellationToken = default);
+
+    public Task<CasdoorResponse?> SendEmailByProviderAsync(string title, string content, string sender, string provider,
+        IEnumerable<string> receivers, CancellationToken cancellationToken = default);
+
+    public Task<CasdoorResponse?> SendSmsByProviderAsync(string content, string provider, IEnumerable<string> receivers,
+        CancellationToken cancellationToken = default);
+
+    public Task<CasdoorResponse?> SendNotificationAsync(string content, string recipient, CancellationToken cancellationToken = default);
 }

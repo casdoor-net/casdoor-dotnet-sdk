@@ -59,6 +59,27 @@ public class CasdoorLdap
 
     [JsonPropertyName("lastSync")]
     public string? LastSync { get; set; }
+
+    [JsonPropertyName("allowSelfSignedCert")]
+    public bool AllowSelfSignedCert { get; set; }
+
+    [JsonPropertyName("defaultGroup")]
+    public string? DefaultGroup { get; set; }
+
+    [JsonPropertyName("defaultGroups")]
+    public IEnumerable<string>? DefaultGroups { get; set; }
+
+    [JsonPropertyName("passwordType")]
+    public string? PasswordType { get; set; }
+
+    [JsonPropertyName("customAttributes")]
+    public Dictionary<string, string>? CustomAttributes { get; set; }
+
+    [JsonPropertyName("enableGroups")]
+    public bool EnableGroups { get; set; }
+
+    [JsonPropertyName("enablePasswordReset")]
+    public bool EnablePasswordReset { get; set; }
 }
 
 public class CasdoorLdapUsers
@@ -122,4 +143,19 @@ public class CasdoorLdapUser
 
     [JsonPropertyName("address")]
     public string? Address { get; set; }
+
+    [JsonPropertyName("userPrincipalName")]
+    public string? UserPrincipalName { get; set; }
+
+    [JsonPropertyName("country")]
+    public string? Country { get; set; }
+
+    [JsonPropertyName("countryName")]
+    public string? CountryName { get; set; }
+
+    [JsonPropertyName("memberOf")]
+    public IEnumerable<string>? MemberOf { get; set; }
+
+    [JsonPropertyName("attributes")]
+    public Dictionary<string, string>? Attributes { get; set; }
 }

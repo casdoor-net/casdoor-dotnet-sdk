@@ -107,4 +107,19 @@ public class CasdoorPayment
 
     [JsonPropertyName("message")]
     public string? Message { get; set; }
+
+    [JsonPropertyName("products")]
+    public IEnumerable<string>? Products { get; set; }
+
+    [JsonPropertyName("productsDisplayName")]
+    public string? ProductsDisplayName { get; set; }
+
+    [JsonPropertyName("order")]
+    public string? Order { get; set; }
+
+    [JsonPropertyName("orderObj")]
+    public CasdoorOrder? OrderObj { get; set; }
+
+    [JsonPropertyName("successUrl")]
+    public string? SuccessUrl { get; set; }
 }

@@ -23,4 +23,6 @@ public interface ICasdoorPlanClient
     public Task<CasdoorPlan?> GetPlanAsync(string name, string? owner = null, CancellationToken cancellationToken = default);
 
     public Task<IEnumerable<CasdoorPlan>?> GetPlansAsync(string? owner = null, CancellationToken cancellationToken = default);
+    public Task<(IEnumerable<CasdoorPlan>? plans, int totalCount)> GetPaginationPlansAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default);
 }

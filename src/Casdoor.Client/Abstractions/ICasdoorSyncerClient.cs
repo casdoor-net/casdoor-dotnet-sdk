@@ -27,4 +27,6 @@ public interface ICasdoorSyncerClient
     public Task<CasdoorResponse?> RunSyncerAsync(CasdoorSyncer casdoorSyncer, CancellationToken cancellationToken = default);
 
     public Task<CasdoorResponse?> UpdateSyncerAsync(CasdoorSyncer casdoorSyncer, CancellationToken cancellationToken = default);
+    public Task<(IEnumerable<CasdoorSyncer>? syncers, int totalCount)> GetPaginationSyncersAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default);
 }

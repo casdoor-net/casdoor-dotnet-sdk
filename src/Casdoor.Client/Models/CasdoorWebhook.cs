@@ -81,4 +81,40 @@ public class CasdoorWebhook
 
     [JsonPropertyName("isEnabled")]
     public bool IsEnabled { get; set; }
+
+    [JsonPropertyName("url")]
+    public string? Url { get; set; }
+
+    [JsonPropertyName("method")]
+    public string? Method { get; set; }
+
+    [JsonPropertyName("contentType")]
+    public string? ContentType { get; set; }
+
+    [JsonPropertyName("headers")]
+    public IEnumerable<object>? Headers { get; set; }
+
+    [JsonPropertyName("events")]
+    public IEnumerable<string>? Events { get; set; }
+
+    [JsonPropertyName("tokenFields")]
+    public IEnumerable<string>? TokenFields { get; set; }
+
+    [JsonPropertyName("objectFields")]
+    public IEnumerable<string>? ObjectFields { get; set; }
+
+    [JsonPropertyName("isUserExtended")]
+    public bool IsUserExtended { get; set; }
+
+    [JsonPropertyName("singleOrgOnly")]
+    public bool SingleOrgOnly { get; set; }
+
+    [JsonPropertyName("maxRetries")]
+    public int MaxRetries { get; set; }
+
+    [JsonPropertyName("retryInterval")]
+    public int RetryInterval { get; set; }
+
+    [JsonPropertyName("useExponentialBackoff")]
+    public bool UseExponentialBackoff { get; set; }
 }

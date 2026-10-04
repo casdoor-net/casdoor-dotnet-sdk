@@ -23,4 +23,6 @@ public interface ICasdoorEnforcerClient
     public Task<CasdoorEnforcer?> GetEnforcerAsync(string name, string? owner = null, CancellationToken cancellationToken = default);
 
     public Task<IEnumerable<CasdoorEnforcer>?> GetEnforcersAsync(string? owner = null, CancellationToken cancellationToken = default);
+    public Task<(IEnumerable<CasdoorEnforcer>? enforcers, int totalCount)> GetPaginationEnforcersAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default);
 }

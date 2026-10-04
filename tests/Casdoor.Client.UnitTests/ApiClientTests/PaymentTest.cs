@@ -27,7 +27,7 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
         {
             var userClient = _servicesFixture.ServiceProvider.GetService<ICasdoorClient>();
 
-            const string ownerName = "admin";
+            string ownerName = TestConfig.OrganizationName;
             string name = TestUtils.GetRandomName("Payment");
 
             var payment = new CasdoorPayment()

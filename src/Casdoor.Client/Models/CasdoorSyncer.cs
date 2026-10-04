@@ -103,4 +103,22 @@ public class CasdoorSyncer
 
     [JsonPropertyName("user")]
     public string? User { get; set; }
+
+    [JsonPropertyName("sshType")]
+    public string? SshType { get; set; }
+
+    [JsonPropertyName("sshHost")]
+    public string? SshHost { get; set; }
+
+    [JsonPropertyName("sshPort")]
+    public int SshPort { get; set; }
+
+    [JsonPropertyName("sshUser")]
+    public string? SshUser { get; set; }
+
+    [JsonPropertyName("sshPassword")]
+    public string? SshPassword { get; set; }
+
+    [JsonPropertyName("cert")]
+    public string? Cert { get; set; }
 }

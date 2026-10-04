@@ -31,4 +31,12 @@ public interface ICasdoorUserClient
     public Task<CasdoorResponse?> CheckUserPasswordAsync(string name, CancellationToken cancellationToken = default);
     public Task<int?> GetUserCount(string owner, int isOnline, CancellationToken cancellationToken = default);
     public Task<(IEnumerable<CasdoorUser>? users, int totalCount)> GetPaginatedUsersAsync(int page, int pageSize, IDictionary<string, string?>? queryParams = null, string? owner = null, CancellationToken cancellationToken = default);
+    public Task<(IEnumerable<CasdoorUser>? users, int totalCount)> GetPaginationUsersAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default);
+    public Task<IEnumerable<CasdoorUser>?> GetGlobalUsersAsync(CancellationToken cancellationToken = default);
+    public Task<CasdoorUser?> GetUserByUserIdAsync(string userId, CancellationToken cancellationToken = default);
+    public Task<CasdoorResponse?> UpdateUserByUserIdAsync(string owner, string userId, CasdoorUser user,
+        CancellationToken cancellationToken = default);
+    public Task<CasdoorResponse?> UpdateUserForColumnsAsync(CasdoorUser user, IEnumerable<string> columns,
+        CancellationToken cancellationToken = default);
 }

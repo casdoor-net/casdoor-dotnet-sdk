@@ -61,7 +61,7 @@ public partial class CasdoorClient
         var id = $"{owner}/{HtmlEncode(name)}";
         var queryMap = new QueryMapBuilder().Add("id", id).QueryMap;
         var url = _options.GetActionUrl("get-provider", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<CasdoorProvider?>();
     }
 
@@ -70,14 +70,14 @@ public partial class CasdoorClient
     {
         var queryMap = new QueryMapBuilder().Add("owner", owner).QueryMap;
         var url = _options.GetActionUrl("get-providers", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorProvider>?>();
     }
 
     public virtual async Task<IEnumerable<CasdoorProvider>?> GetGlobalProvidersAsync(CancellationToken cancellationToken = default)
     {
         var url = _options.GetActionUrl("get-global-providers");
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorProvider>?>();
     }
 
@@ -88,5 +88,16 @@ public partial class CasdoorClient
 #else
         return HttpUtility.HtmlEncode(value);
 #endif
+    }
+
+    public virtual async Task<(IEnumerable<CasdoorProvider>? providers, int totalCount)> GetPaginationProvidersAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default)
+    {
+        queryMap ??= new List<KeyValuePair<string, string?>>();
+        queryMap.Add(new KeyValuePair<string, string?>("owner", _options.OrganizationName));
+        queryMap.Add(new KeyValuePair<string, string?>("p", p.ToString()));
+        queryMap.Add(new KeyValuePair<string, string?>("pageSize", pageSize.ToString()));
+        var result = await GetFromJsonAsync<CasdoorResponse?>(_options.GetActionUrl("get-providers", queryMap), cancellationToken);
+        return (result.DeserializeData<IEnumerable<CasdoorProvider>?>(), result.DeserializeData2<int?>() ?? 0);
     }
 }

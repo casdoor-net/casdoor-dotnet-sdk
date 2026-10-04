@@ -26,7 +26,6 @@ public interface ICasdoorSubscriptionClient
     public Task<IEnumerable<CasdoorSubscription>?> GetSubscriptionsAsync(string owner, CancellationToken cancellationToken = default);
 
     public Task<CasdoorResponse?> UpdateSubscriptionAsync(CasdoorSubscription casdoorSubscription, CancellationToken cancellationToken = default);
+    public Task<(IEnumerable<CasdoorSubscription>? subscriptions, int totalCount)> GetPaginationSubscriptionsAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default);
 }
-  
- 
-

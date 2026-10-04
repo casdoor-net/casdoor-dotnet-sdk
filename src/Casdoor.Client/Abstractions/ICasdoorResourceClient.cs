@@ -29,4 +29,8 @@ public interface ICasdoorResourceClient
         string field, string value, string sortField, string sortOrder, CancellationToken cancellationToken = default);
 
     public Task<IEnumerable<CasdoorUserResource>?> GetPaginationResourcesAsync(string owner, string user, int pageSize, int p, string field, string value, string sortField, string sortOrder, CancellationToken cancellationToken = default);
+    public Task<CasdoorUserResource?> GetResourceExAsync(string owner, string name, CancellationToken cancellationToken = default);
+    public Task<CasdoorResponse?> UpdateResourceAsync(CasdoorUserResource resource, CancellationToken cancellationToken = default);
+    public Task<CasdoorResponse?> DeleteResourceWithTagAsync(CasdoorUserResource resource, string tag,
+        CancellationToken cancellationToken = default);
 }

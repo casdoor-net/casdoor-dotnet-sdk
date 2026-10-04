@@ -28,7 +28,7 @@ public partial class CasdoorClient
         CancellationToken cancellationToken = default)
     {
         string url = _options.GetActionUrl("add-cert");
-        cert.Owner = _options.OrganizationName;
+        cert.Owner = GetOwner(cert.Owner);
         return PostAsJsonAsync(url, cert, cancellationToken);
     }
 
@@ -42,9 +42,9 @@ public partial class CasdoorClient
     public virtual async Task<CasdoorCert?> GetCertAsync(string name, CancellationToken cancellationToken = default)
     {
         var queryMap = new QueryMapBuilder()
-            .Add("id", $"{_options.OrganizationName}/{name}").QueryMap;
+            .Add("id", GetId(name)).QueryMap;
         string url = _options.GetActionUrl("get-cert", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<CasdoorCert?>();
     }
 
@@ -53,14 +53,14 @@ public partial class CasdoorClient
         var queryMap = new QueryMapBuilder()
             .Add("owner", _options.OrganizationName).QueryMap;
         string url = _options.GetActionUrl("get-certs", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorCert>?>();
     }
 
     public virtual async Task<IEnumerable<CasdoorCert>?> GetGlobalCertsAsync(CancellationToken cancellationToken = default)
     {
         string url = _options.GetActionUrl("get-global-certs");
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorCert>?>();
     }
 
@@ -78,7 +78,7 @@ public partial class CasdoorClient
         {
             queryMapBuilder.Add("columns", columnsValue);
         }
-        cert.Owner = _options.OrganizationName;
+        cert.Owner = GetOwner(cert.Owner);
 
         string url = _options.GetActionUrl(action, queryMapBuilder.QueryMap);
         return PostAsJsonAsync(url, cert, cancellationToken);

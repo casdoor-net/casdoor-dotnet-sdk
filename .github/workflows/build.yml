@@ -26,19 +26,18 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
           dotnet-version: |
               3.1.x
               5.0.x
               6.0.x
               7.0.x
-          include-prerelease: true
 
     - name: Check .NET info
       run: dotnet --info
@@ -91,7 +90,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Dry run semantic-release
         run: |
@@ -106,7 +105,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
@@ -117,14 +116,13 @@ jobs:
       run: git tag -l -n
 
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
           dotnet-version: |
               3.1.x
               5.0.x
               6.0.x
               7.0.x
-          include-prerelease: true
 
     - name: Check .NET info
       run: dotnet --info

@@ -37,4 +37,10 @@ public class CasdoorSession
 
     [JsonPropertyName("sessionId")]
     public IEnumerable<string>? SessionId { get; set; }
+
+    [JsonPropertyName("sessionInfos")]
+    public IEnumerable<object>? SessionInfos { get; set; }
+
+    [JsonPropertyName("ExclusiveSignin")]
+    public bool ExclusiveSignin { get; set; }
 }

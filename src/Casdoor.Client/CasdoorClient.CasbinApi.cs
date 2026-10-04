@@ -97,21 +97,9 @@ public partial class CasdoorClient
             queryMapBuilder.Add("enforcerId", enforcerId!);
         }
 
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri(_options.GetActionUrl(url, queryMapBuilder.QueryMap)),
-            Content = new StringContent(
-                data,
-                Encoding.UTF8,
-                "application/json")
-        };
-        request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-        if (_options.ClientSecret != "")
-        {
-            request.SetBasicAuthentication(_options.ClientId, _options.ClientSecret);
-        }
+        using var request = CreateRequest(HttpMethod.Post, _options.GetActionUrl(url, queryMapBuilder.QueryMap),
+            new StringContent(data, Encoding.UTF8, "application/json"));
+        request.Content!.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
         var response = await _httpClient.SendAsync(request, cancellationToken);
         string responseContent = await response.Content.ReadAsStringAsync(); // netstandard2.0 does not support cancellationToken
@@ -130,7 +118,7 @@ public partial class CasdoorClient
 
     private async Task<IEnumerable<string>?> GetAllAsync(string url, CancellationToken cancellationToken = default)
     {
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(_options.GetActionUrl(url), cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(_options.GetActionUrl(url), cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<string>>();
     }
 }

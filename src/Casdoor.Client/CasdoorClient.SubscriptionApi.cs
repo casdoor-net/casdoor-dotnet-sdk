@@ -37,7 +37,7 @@ public partial class CasdoorClient
             .Add("id", $"{owner}/{name}").QueryMap;
 
         string url = _options.GetActionUrl("get-subscription", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
         return result.DeserializeData<CasdoorSubscription?>();
     }
 
@@ -48,7 +48,7 @@ public partial class CasdoorClient
              .Add("owner", owner).QueryMap;
 
         string url = _options.GetActionUrl("get-subscriptions", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorSubscription>?>();
     }
 
@@ -61,7 +61,7 @@ public partial class CasdoorClient
         queryMap.Add(new KeyValuePair<string, string?>("pageSize", pageSize.ToString()));
 
         string url = _options.GetActionUrl("get-subscriptions", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorSubscription>?>();
     }
 
@@ -72,5 +72,16 @@ public partial class CasdoorClient
              .Add("id", $"{casdoorSubscription.Owner}/{casdoorSubscription.Name}").QueryMap;
         string url = _options.GetActionUrl("update-subscription", queryMap);
         return PostAsJsonAsync(url, casdoorSubscription, cancellationToken);
+    }
+
+    public virtual async Task<(IEnumerable<CasdoorSubscription>? subscriptions, int totalCount)> GetPaginationSubscriptionsAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default)
+    {
+        queryMap ??= new List<KeyValuePair<string, string?>>();
+        queryMap.Add(new KeyValuePair<string, string?>("owner", _options.OrganizationName));
+        queryMap.Add(new KeyValuePair<string, string?>("p", p.ToString()));
+        queryMap.Add(new KeyValuePair<string, string?>("pageSize", pageSize.ToString()));
+        var result = await GetFromJsonAsync<CasdoorResponse?>(_options.GetActionUrl("get-subscriptions", queryMap), cancellationToken);
+        return (result.DeserializeData<IEnumerable<CasdoorSubscription>?>(), result.DeserializeData2<int?>() ?? 0);
     }
 }

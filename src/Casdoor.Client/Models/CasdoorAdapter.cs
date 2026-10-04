@@ -73,4 +73,7 @@ public class CasdoorAdapter
 
     [JsonPropertyName("isEnabled")]
     public bool IsEnabled { get; set; }
+
+    [JsonPropertyName("useSameDb")]
+    public bool UseSameDb { get; set; }
 }

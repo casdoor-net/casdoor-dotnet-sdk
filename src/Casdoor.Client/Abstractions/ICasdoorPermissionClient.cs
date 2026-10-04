@@ -25,4 +25,6 @@ public interface ICasdoorPermissionClient
     public Task<CasdoorPermission?> GetPermissionAsync(string id, CancellationToken cancellationToken = default);
     public Task<IEnumerable<CasdoorPermission>?> GetPermissionsAsync(string owner, CancellationToken cancellationToken = default);
     public Task<IEnumerable<CasdoorPermission>?> GetPermissionsByRoleAsync(string name, string? owner = null, CancellationToken cancellationToken = default);
+    public Task<CasdoorResponse?> UpdatePermissionForColumnsAsync(CasdoorPermission permission, IEnumerable<string> columns,
+        CancellationToken cancellationToken = default);
 }

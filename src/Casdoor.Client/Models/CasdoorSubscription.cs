@@ -67,4 +67,22 @@ public class CasdoorSubscription
 
     [JsonPropertyName("state")]
     public string? State { get; set; }
+
+    [JsonPropertyName("group")]
+    public string? Group { get; set; }
+
+    [JsonPropertyName("pricing")]
+    public string? Pricing { get; set; }
+
+    [JsonPropertyName("payment")]
+    public string? Payment { get; set; }
+
+    [JsonPropertyName("startTime")]
+    public string? StartTime { get; set; }
+
+    [JsonPropertyName("endTime")]
+    public string? EndTime { get; set; }
+
+    [JsonPropertyName("period")]
+    public string? Period { get; set; }
 }

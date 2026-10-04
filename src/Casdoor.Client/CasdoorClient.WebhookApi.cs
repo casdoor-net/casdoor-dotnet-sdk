@@ -39,7 +39,7 @@ public partial class CasdoorClient
             .Add("id", $"{owner}/{name}").QueryMap;
 
         string url = _options.GetActionUrl("get-webhook", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
         return result.DeserializeData<CasdoorWebhook?>();
     }
 
@@ -50,7 +50,7 @@ public partial class CasdoorClient
              .Add("owner",owner).QueryMap;
 
         string url = _options.GetActionUrl("get-webhooks", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorWebhook>?>();
     }
 
@@ -61,5 +61,16 @@ public partial class CasdoorClient
              .Add("id", $"{casdoorWebhook.Owner}/{casdoorWebhook.Name}").QueryMap;
         string url = _options.GetActionUrl("update-webhook", queryMap);
         return PostAsJsonAsync(url, casdoorWebhook, cancellationToken);
+    }
+
+    public virtual async Task<(IEnumerable<CasdoorWebhook>? webhooks, int totalCount)> GetPaginationWebhooksAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default)
+    {
+        queryMap ??= new List<KeyValuePair<string, string?>>();
+        queryMap.Add(new KeyValuePair<string, string?>("owner", _options.OrganizationName));
+        queryMap.Add(new KeyValuePair<string, string?>("p", p.ToString()));
+        queryMap.Add(new KeyValuePair<string, string?>("pageSize", pageSize.ToString()));
+        var result = await GetFromJsonAsync<CasdoorResponse?>(_options.GetActionUrl("get-webhooks", queryMap), cancellationToken);
+        return (result.DeserializeData<IEnumerable<CasdoorWebhook>?>(), result.DeserializeData2<int?>() ?? 0);
     }
 }

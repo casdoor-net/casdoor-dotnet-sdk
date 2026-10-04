@@ -44,4 +44,7 @@ public class CasdoorEnforcer
 
     [JsonPropertyName("isEnabled")]
     public bool? IsEnabled { get; set; }
+
+    [JsonPropertyName("modelCfg")]
+    public Dictionary<string, string>? ModelCfg { get; set; }
 }

@@ -81,4 +81,13 @@ public class CasdoorPermission
 
     [JsonPropertyName("groups")]
     public IEnumerable<string>? Groups { get; set; }
+
+    [JsonPropertyName("sourceGroups")]
+    public IEnumerable<string>? SourceGroups { get; set; }
+
+    [JsonPropertyName("sourceRoles")]
+    public IEnumerable<string>? SourceRoles { get; set; }
+
+    [JsonPropertyName("expireTime")]
+    public string? ExpireTime { get; set; }
 }

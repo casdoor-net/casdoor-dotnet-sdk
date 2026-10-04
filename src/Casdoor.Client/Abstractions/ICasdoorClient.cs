@@ -19,8 +19,11 @@ public interface ICasdoorClient :
     ICasdoorApplicationClient, ICasdoorOrganizationClient, ICasdoorProviderClient, ICasdoorAccountClient, ICasdoorModelClient,
     ICasdoorEnforcerClient, ICasdoorGroupClient, ICasdoorPlanClient, ICasdoorSyncerClient, ICasdoorSubscriptionClient, ICasdoorPermissionClient,
     ICasdoorAdapterClient, ICasdoorCertClient, ICasdoorPaymentClient, ICasdoorPricingClient, ICasdoorProductClient, ICasdoorSessionClient,
-    ICasdoorRoleClient, ICasdoorRecordClient
+    ICasdoorRoleClient, ICasdoorRecordClient, ICasdoorInvitationClient, ICasdoorOrderClient, ICasdoorTransactionClient,
+    ICasdoorPolicyClient, ICasdoorMfaClient
 {
+    public ICasdoorClient WithAccessToken(string accessToken);
+    public string GetId(string name, string? owner = null);
     public string GetSigninUrl(string redirectUrl);
     public string GetSigninUrl(string codeVerifier, bool noRedirect);
 

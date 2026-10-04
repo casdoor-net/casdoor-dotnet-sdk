@@ -35,6 +35,11 @@ public class CasdoorOptions
     public bool RequireHttpsMetadata { get; set; } = false;
     public CasdoorProtocolsOptions Protocols { get; set; } = new();
     public CasdoorPathOptions Path { get; set; } = new();
+
+    /// <summary>
+    ///     The HTTP headers added to all the API requests, e.g. "Accept-Language".
+    /// </summary>
+    public Dictionary<string, string> CustomHeaders { get; set; } = new();
 }
 
 public class CasdoorPathOptions

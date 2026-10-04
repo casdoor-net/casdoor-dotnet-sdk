@@ -137,4 +137,28 @@ public class CasdoorProvider
 
     [JsonPropertyName("providerUrl")]
     public string? ProviderUrl { get; set; }
+
+    [JsonPropertyName("customLogoutUrl")]
+    public string? CustomLogoutUrl { get; set; }
+
+    [JsonPropertyName("httpHeaders")]
+    public Dictionary<string, string>? HttpHeaders { get; set; }
+
+    [JsonPropertyName("sslMode")]
+    public string? SslMode { get; set; }
+
+    [JsonPropertyName("emailRegex")]
+    public string? EmailRegex { get; set; }
+
+    [JsonPropertyName("enableProxy")]
+    public bool EnableProxy { get; set; }
+
+    [JsonPropertyName("enablePkce")]
+    public bool EnablePkce { get; set; }
+
+    [JsonPropertyName("requireMessageAuthenticator")]
+    public bool RequireMessageAuthenticator { get; set; }
+
+    [JsonPropertyName("state")]
+    public string? State { get; set; }
 }

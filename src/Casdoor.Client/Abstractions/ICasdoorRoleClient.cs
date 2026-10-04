@@ -23,4 +23,8 @@ public interface ICasdoorRoleClient
     public Task<CasdoorRole?> GetRoleAsync(string name, string? owner = null,
         CancellationToken cancellationToken = default);
     public Task<IEnumerable<CasdoorRole>?> GetRolesAsync(string? owner = null, CancellationToken cancellationToken = default);
+    public Task<(IEnumerable<CasdoorRole>? roles, int totalCount)> GetPaginationRolesAsync(int p, int pageSize,
+        List<KeyValuePair<string, string?>>? queryMap = null, CancellationToken cancellationToken = default);
+    public Task<CasdoorResponse?> UpdateRoleForColumnsAsync(CasdoorRole role, IEnumerable<string> columns,
+        CancellationToken cancellationToken = default);
 }

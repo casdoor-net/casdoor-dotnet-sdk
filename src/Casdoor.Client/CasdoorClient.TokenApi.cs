@@ -106,7 +106,7 @@ public partial class CasdoorClient
     {
         var queryMap = new QueryMapBuilder().Add("id", id).QueryMap;
         var url = _options.GetActionUrl("get-captcha-status", queryMap);
-        return await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
+        return await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
     }
 
     public virtual async Task<CasdoorToken?> GetTokenAsync(string owner, string name,
@@ -116,7 +116,7 @@ public partial class CasdoorClient
             .Add("id", $"{owner}/{name}").QueryMap;
 
         var url = _options.GetActionUrl("get-token", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
         return result.DeserializeData<CasdoorToken?>();
     }
 
@@ -126,7 +126,7 @@ public partial class CasdoorClient
         var queryMap = new QueryMapBuilder()
             .Add("owner", owner).QueryMap;
         var url = _options.GetActionUrl("get-tokens", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorToken>?>();
     }
 
@@ -140,7 +140,7 @@ public partial class CasdoorClient
         queryMap.Add(new KeyValuePair<string, string?>("p", p.ToString()));
 
         var url = _options.GetActionUrl("get-tokens", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorToken>?>();
     }
 
@@ -163,5 +163,63 @@ public partial class CasdoorClient
 
         string url = _options.GetActionUrl(action, queryMapBuilder.QueryMap);
         return PostAsJsonAsync(url, token, cancellationToken);
+    }
+
+    public virtual Task<CasdoorResponse?> UpdateTokenForColumnsAsync(CasdoorToken token, IEnumerable<string> columns,
+        CancellationToken cancellationToken = default) =>
+        UpdateTokenColumnsAsync(token, columns, cancellationToken);
+
+    /// <summary>
+    ///     Introspects the token (RFC 7662), the result contains "active" and the claims of the token.
+    /// </summary>
+    public virtual async Task<TokenIntrospectionResponse> IntrospectTokenAsync(string token, string tokenTypeHint = "access_token",
+        CancellationToken cancellationToken = default) =>
+        await _httpClient.IntrospectTokenAsync(new TokenIntrospectionRequest
+        {
+            Address = $"{_options.Endpoint.TrimEnd('/')}/api/login/oauth/introspect",
+            ClientId = _options.ClientId,
+            ClientSecret = _options.ClientSecret,
+            Token = token,
+            TokenTypeHint = tokenTypeHint
+        }, cancellationToken);
+
+    /// <summary>
+    ///     Gets the token with the Resource Owner Password Credentials grant, the same as RequestPasswordTokenAsync().
+    /// </summary>
+    public virtual Task<TokenResponse> GetOAuthTokenByPasswordAsync(string username, string password,
+        CancellationToken cancellationToken = default) =>
+        RequestPasswordTokenAsync(username, password, cancellationToken);
+
+    /// <summary>
+    ///     Signs in as any user of the organization with the organization's master password.
+    /// </summary>
+    public virtual Task<TokenResponse> ImpersonateUserAsync(string username, string masterPassword,
+        CancellationToken cancellationToken = default) =>
+        RequestPasswordTokenAsync(username, masterPassword, cancellationToken);
+
+    public virtual Task<TokenResponse> RefreshOAuthTokenAsync(string refreshToken, CancellationToken cancellationToken = default) =>
+        RequestRefreshTokenAsync(refreshToken, cancellationToken);
+
+    /// <summary>
+    ///     Signs the user out of all the applications and devices (SSO logout).
+    /// </summary>
+    public virtual Task<CasdoorResponse?> LogoutAsync(string accessToken, CancellationToken cancellationToken = default) =>
+        SsoLogoutAsync(accessToken, true, cancellationToken);
+
+    /// <summary>
+    ///     Only signs the user out of the session of the access token.
+    /// </summary>
+    public virtual Task<CasdoorResponse?> LogoutCurrentSessionAsync(string accessToken, CancellationToken cancellationToken = default) =>
+        SsoLogoutAsync(accessToken, false, cancellationToken);
+
+    private async Task<CasdoorResponse?> SsoLogoutAsync(string accessToken, bool logoutAll, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrEmpty(accessToken))
+        {
+            throw new ArgumentException("the access token should not be empty", nameof(accessToken));
+        }
+        var queryMap = new QueryMapBuilder().Add("logoutAll", logoutAll ? "true" : "false").QueryMap;
+        var client = new CasdoorClient(_httpClient, _options) { _accessToken = accessToken };
+        return await client.PostAsJsonAsync(_options.GetActionUrl("sso-logout", queryMap), string.Empty, cancellationToken);
     }
 }

@@ -34,9 +34,9 @@ public partial class CasdoorClient
     public virtual async Task<CasdoorPricing?> GetPricingAsync(string name, CancellationToken cancellationToken = default)
     {
         var queryMap = new QueryMapBuilder()
-            .Add("id", $"{_options.OrganizationName}/{name}").QueryMap;
+            .Add("id", GetId(name)).QueryMap;
         string url = _options.GetActionUrl("get-pricing", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<CasdoorPricing?>();
     }
 
@@ -45,7 +45,7 @@ public partial class CasdoorClient
         var queryMap = new QueryMapBuilder()
             .Add("owner", _options.OrganizationName).QueryMap;
         string url = _options.GetActionUrl("get-pricings", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorPricing>?>();
     }
 
@@ -58,7 +58,7 @@ public partial class CasdoorClient
         queryMap.Add(new KeyValuePair<string, string?>("p", p.ToString()));
 
         string url = _options.GetActionUrl("get-pricings", queryMap);
-        var result = await _httpClient.GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
+        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorPricing>?>();
     }
 
@@ -73,7 +73,7 @@ public partial class CasdoorClient
             queryMapBuilder.Add("columns", columnsValue);
         }
 
-        pricing.Owner = _options.OrganizationName;
+        pricing.Owner = GetOwner(pricing.Owner);
 
         string url = _options.GetActionUrl(action, queryMapBuilder.QueryMap);
         return PostAsJsonAsync(url, pricing, cancellationToken);
