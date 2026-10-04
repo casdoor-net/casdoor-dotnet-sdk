@@ -45,6 +45,7 @@ public class TransactionTest : IClassFixture<ServicesFixture>
             Tag = "Organization",
             Amount = 100,
             Currency = "USD",
+            User = "admin",
             State = "Paid"
         };
 
@@ -55,6 +56,7 @@ public class TransactionTest : IClassFixture<ServicesFixture>
         string name = response!.Data!.ToString()!;
 
         Assert.Contains(await _client.GetTransactionsAsync() ?? Enumerable.Empty<CasdoorTransaction>(), item => item.Name == name);
+        Assert.Contains(await _client.GetUserTransactionsAsync("admin") ?? Enumerable.Empty<CasdoorTransaction>(), item => item.Name == name);
         Assert.True((await _client.GetPaginationTransactionsAsync(1, 10)).totalCount > 0);
 
         var retrieved = await _client.GetTransactionAsync(name);

@@ -44,8 +44,9 @@ public partial class CasdoorClient
     public virtual async Task<IEnumerable<CasdoorTransaction>?> GetUserTransactionsAsync(string userName,
         CancellationToken cancellationToken = default)
     {
-        var queryMap = new QueryMapBuilder().Add("owner", _options.OrganizationName).Add("user", userName).QueryMap;
-        var result = await GetFromJsonAsync<CasdoorResponse?>(_options.GetActionUrl("get-user-transactions", queryMap), cancellationToken);
+        // Casdoor has no get-user-transactions API, get-transactions filters the transactions by user
+        var queryMap = new QueryMapBuilder().Add("owner", _options.OrganizationName).Add("field", "user").Add("value", userName).QueryMap;
+        var result = await GetFromJsonAsync<CasdoorResponse?>(_options.GetActionUrl("get-transactions", queryMap), cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorTransaction>?>();
     }
 

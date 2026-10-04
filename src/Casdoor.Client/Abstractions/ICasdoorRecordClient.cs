@@ -17,8 +17,15 @@ namespace Casdoor.Client;
 public interface ICasdoorRecordClient
 {
     public Task<CasdoorResponse?> AddRecordAsync(CasdoorRecord record, CancellationToken cancellationToken = default);
+    [Obsolete("Casdoor has no update-record API, so this call always fails.")]
     public Task<CasdoorResponse?> UpdateRecordAsync(CasdoorRecord record, CancellationToken cancellationToken = default);
+    [Obsolete("Casdoor has no delete-record API, so this call always fails.")]
     public Task<CasdoorResponse?> DeleteRecordAsync(CasdoorRecord record, CancellationToken cancellationToken = default);
+    /// <summary>
+    ///     Gets a record by name, or null if it doesn't exist. Casdoor has no API to get a single record, so it
+    ///     searches the records by name. Like the other APIs that read records, it needs the access token of an
+    ///     admin user, see WithAccessToken().
+    /// </summary>
     public Task<CasdoorRecord?> GetRecordAsync(string name, CancellationToken cancellationToken = default);
     public Task<IEnumerable<CasdoorRecord>?> GetRecordsAsync(CancellationToken cancellationToken = default);
     public Task<IEnumerable<CasdoorRecord>?> GetPaginationRecordsAsync(int pageSize, int p,

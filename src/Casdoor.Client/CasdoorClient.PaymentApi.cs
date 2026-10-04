@@ -52,7 +52,7 @@ public partial class CasdoorClient
             .Add("owner",_options.OrganizationName)
             .Add("organization", _options.OrganizationName)
             .Add("user", userName).QueryMap;
-        string url = _options.GetActionUrl("get-user-payment", queryMap);
+        string url = _options.GetActionUrl("get-user-payments", queryMap);
         var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
         return result.DeserializeData<IEnumerable<CasdoorPayment>?>();
     }

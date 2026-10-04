@@ -37,6 +37,7 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
                 CreatedTime = DateTime.Now.ToString(CultureInfo.InvariantCulture),
                 DisplayName = name,
                 ProductName = "casbin",
+                User = "admin",
             };
 
             // Add a new object
@@ -61,6 +62,10 @@ namespace Casdoor.Client.UnitTests.ApiClientTests
             }
 
             Assert.True(found);
+
+            // Get the objects of the user, check if our added object is inside the list
+            IEnumerable<CasdoorPayment>? userPayments = await userClient.GetUserPaymentsAsync("admin");
+            Assert.Contains(userPayments ?? Enumerable.Empty<CasdoorPayment>(), item => item.Name == name);
 
             // Get the object
             Task<CasdoorPayment?> paymentAsync = userClient.GetPaymentAsync(name);

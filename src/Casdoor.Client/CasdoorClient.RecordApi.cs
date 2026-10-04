@@ -25,19 +25,22 @@ public partial class CasdoorClient
         CancellationToken cancellationToken = default)
     => ModifyRecordAsync("add-record", record, null, cancellationToken: cancellationToken);
 
+    [Obsolete("Casdoor has no update-record API, so this call always fails.")]
     public virtual Task<CasdoorResponse?> UpdateRecordAsync(CasdoorRecord record, CancellationToken cancellationToken = default)
     => ModifyRecordAsync("update-record", record, null, cancellationToken: cancellationToken);
 
+    [Obsolete("Casdoor has no delete-record API, so this call always fails.")]
     public virtual Task<CasdoorResponse?> DeleteRecordAsync(CasdoorRecord record, CancellationToken cancellationToken = default)
     => ModifyRecordAsync("delete-record", record, null, cancellationToken: cancellationToken);
 
     public virtual async Task<CasdoorRecord?> GetRecordAsync(string name, CancellationToken cancellationToken = default)
     {
-        var queryMap = new QueryMapBuilder()
-            .Add("id", GetId(name)).QueryMap;
-        string url = _options.GetActionUrl("get-record", queryMap);
-        var result = await GetFromJsonAsync<CasdoorResponse?>(url, cancellationToken: cancellationToken);
-        return result.DeserializeData<CasdoorRecord?>();
+        string recordName = name.Substring(name.LastIndexOf('/') + 1);
+
+        // The name filter matches the records whose names contain the given name
+        var queryMap = new List<KeyValuePair<string, string?>> { new("field", "name"), new("value", recordName) };
+        var records = await GetPaginationRecordsAsync(100, 1, queryMap, cancellationToken);
+        return records?.FirstOrDefault(record => record.Name == recordName);
     }
 
     public virtual async Task<IEnumerable<CasdoorRecord>?> GetRecordsAsync(CancellationToken cancellationToken = default)
